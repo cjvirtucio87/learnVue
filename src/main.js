@@ -6,7 +6,7 @@ let babelify = require('babelify');
 
 browserify({debug: true})
   .transform(babelify)
-  .require('./script.js', {entry: true})
+  .require('src/app.js', {entry: true})
   .bundle()
   .on('error', err => { console.log('ERROR: ' + err.message); })
   .pipe(fs.createWriteStream('bundle.js'));
