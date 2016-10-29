@@ -1,7 +1,13 @@
 {
-  "name": "browserify-babel-demo",
-  "main": "dist/module.js",
+  "name": "vueApp",
+  "main": "dist/vue-app.js",
+  "aliasify": {
+    "aliases": {
+      "$vue": "vue/dist/vue.js"
+    }
+  },
   "devDependencies": {
+    "aliasify": "^2.0.0",
     "babel-preset-es2015": "^6.18.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",

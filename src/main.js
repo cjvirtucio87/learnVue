@@ -9,4 +9,4 @@ browserify({debug: true})
   .require('src/app.js', {entry: true})
   .bundle()
   .on('error', err => { console.log('ERROR: ' + err.message); })
-  .pipe(fs.createWriteStream('bundle.js'));
+  .pipe(fs.createWriteStream('dist/vue-app.js'));
