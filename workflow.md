@@ -13,3 +13,10 @@
 
 
 *you need to define your data in the config before instantiating a Vue instance
+*setup the following scripts and run with npm run:
+{
+...
+"scripts": {
+  "build": "browserify src/app.js -o > dist/vue-app.js -t [ babelify --presets [ es2015 ] ]",
+  "watch": "watchify src/app.js -o dist/vue-app.js"
+}

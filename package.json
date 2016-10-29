@@ -12,12 +12,12 @@
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "jquery": "^3.1.1",
-    "uglify": "^0.1.5",
-    "vue": "^2.0.3",
-    "watchify": "^3.7.0"
+    "lodash": "^4.16.4",
+    "uglifyjs": "^2.4.10",
+    "vue": "^2.0.3"
   },
   "scripts": {
-    "watch": "watchify src/main.js -o dist/vue-app.js",
-    "build": "browserify src/main.js | uglifyjs -mc warnings=false > dist/vue-app.js"
+    "build": "browserify src/app.js -o > dist/vue-app.js -t [ babelify --presets [ es2015 ] ]",
+    "watch": "watchify src/app.js -o dist/vue-app.js"
   }
 }

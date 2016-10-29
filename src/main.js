@@ -6,7 +6,6 @@ let fs = require('fs');
 let browserify = require('browserify');
 // requiring modules and plugins to be used with browserify
 let babelify = require('babelify');
-let watchify = require('watchify');
 
 browserify({cache: {}, packageCache: {}, debug: true})
   .transform(babelify)
