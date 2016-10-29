@@ -8,4 +8,8 @@
 8. (optional) add .eslintrc.json file to configure eslint.
 9. require modules in your app.js
 10. write a main.js which will have the code needed to compile everything using browserify and babelify.
-11. install aliasify to give aliases for filepaths (useful for modules with specific requirements)
+11. install aliasify to give aliases for filepaths (useful for modules with specific requirements).
+12. install watchify to watch for changes using browserify
+
+
+*you need to define your data in the config before instantiating a Vue instance

@@ -1,12 +1,13 @@
 'use strict';
-const Vue = require("vue/dist/vue.js");
+const Vue = require('vue/dist/vue.js');
 
-let appConfig = {};
-appConfig.data = {};
-appConfig.el = '#app';
+let vConfig = {
+  el: '#app'
+};
 
-const arr = [1,2,3,4,5];
+vConfig.data = {};
+vConfig.data.arr = [1,2,3,4,5];
+vConfig.data.message = 'hello world';
+vConfig.data.anotherMessage = 'this is another message';
 
-appConfig.data.arr = arr;
-
-const app = new Vue(appConfig);
+let app = new Vue(vConfig);

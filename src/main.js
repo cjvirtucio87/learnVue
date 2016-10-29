@@ -1,10 +1,14 @@
 'use strict';
 
+// node's filesystem module
 let fs = require('fs');
+// browserify
 let browserify = require('browserify');
+// requiring modules and plugins to be used with browserify
 let babelify = require('babelify');
+let watchify = require('watchify');
 
-browserify({debug: true})
+browserify({cache: {}, packageCache: {}, debug: true})
   .transform(babelify)
   .require('src/app.js', {entry: true})
   .bundle()

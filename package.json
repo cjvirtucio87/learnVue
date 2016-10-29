@@ -1,6 +1,6 @@
 {
   "name": "vueApp",
-  "main": "dist/vue-app.js",
+  "main": "src/app.js",
   "aliasify": {
     "aliases": {
       "$vue": "vue/dist/vue.js"
@@ -12,6 +12,12 @@
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "jquery": "^3.1.1",
-    "vue": "^2.0.3"
+    "uglify": "^0.1.5",
+    "vue": "^2.0.3",
+    "watchify": "^3.7.0"
+  },
+  "scripts": {
+    "watch": "watchify src/main.js -o dist/vue-app.js",
+    "build": "browserify src/main.js | uglifyjs -mc warnings=false > dist/vue-app.js"
   }
 }
