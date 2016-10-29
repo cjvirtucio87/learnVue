@@ -1,0 +1,8 @@
+{
+  "name": "browserify-babel-demo",
+  "main": "dist/module.js",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
+  }
+}
