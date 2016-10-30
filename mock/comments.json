@@ -1,0 +1,23 @@
+{
+  {
+    "id": 1,
+    "author": "cjvirtucio",
+    "body": "cool!",
+    "commentable_id": 3,
+    "commentable_type": "comment"
+  },
+  {
+    "id": 2,
+    "author": "torrents",
+    "body": "nice!",
+    "commentable_id": 1,
+    "commentable_type": "post"
+  },
+  {
+    "id": 1,
+    "author": "cjvirtucio",
+    "body": "cool!",
+    "commentable_id": 3,
+    "commentable_type": "comment"
+  }
+}

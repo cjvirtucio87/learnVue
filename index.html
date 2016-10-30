@@ -5,19 +5,10 @@
 
   <body>
 
-    <div id="app">
-      <h3>Array</h3>
-      <ul v-for="i in arr">
-        <li>This is li number {{i}}</li>
+    <div id="vue-app">
+      <ul v-for="post in posts">
+        <li>{{ post.id }}</li>
       </ul>
-
-      <h3>Mapped</h3>
-      <ul v-for='i in mapped'>
-        <li>This is li number {{i}}</li>
-      </ul>
-
-      <p v-bind:title="message">hover over me!</p>
-      <p>{{anotherMessage}}</p>
     </div>
 
     <script src='dist/vue-app.js'></script>

@@ -16984,6 +16984,7 @@
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],2:[function(require,module,exports){
 /*!
  * Vue.js v2.0.3
@@ -24503,19 +24504,100 @@ return Vue$3;
 
 },{}],3:[function(require,module,exports){
 'use strict';
-const Vue = require('vue/dist/vue.js');
-const _ = require('lodash');
 
-let vConfig = {
-  el: '#app'
-};
+var _resources = require('./resources.js');
 
-vConfig.data = {};
-vConfig.data.arr = [1,2,3,4,5];
-vConfig.data.message = 'hello world';
-vConfig.data.anotherMessage = 'this is another message';
-vConfig.data.mapped = _.map(vConfig.data.arr, n => n + 1);
+var Vue = require('vue/dist/vue.js');
 
-new Vue(vConfig);
+(function Main(Post, Comment) {
+  // let posts = Post.all();
+  // let comments = Comment.all();
 
-},{"lodash":1,"vue/dist/vue.js":2}]},{},[3]);
+  new Vue({
+    el: '#vue-app',
+    methods: {
+      log: function log() {
+        Vue.http.get('../mock/posts.json');
+      }
+    }
+    // data: {
+    //   posts: posts,
+    //   comments: comments
+    // }
+  });
+})(_resources.Post, _resources.Comment);
+
+},{"./resources.js":4,"vue/dist/vue.js":2}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var Vue = require('vue/dist/vue.js');
+var _ = require('lodash');
+
+// HTTP
+var Post = exports.Post = function ($http, _) {
+  var srv = {};
+  var _data = {};
+  var url = './mock/posts.json';
+
+  function _cacheAll(response) {
+    _data.cached = _.cloneDeep(response);
+    return _data;
+  }
+
+  function _queryAll() {
+    return $http.get(url).then(_cacheAll).catch(_logError);
+  }
+
+  function _logError(reason) {
+    console.error(reason);
+    throw new Error('ERROR: ' + reason);
+  }
+
+  srv.all = function (options) {
+    if (options && options.force || _.isEmpty(_data.cached)) {
+      return _queryAll();
+    } else {
+      return Promise.resolve(_data);
+    }
+  };
+
+  return srv;
+}(Vue.http, _);
+
+var Comment = exports.Comment = function ($http, _) {
+  var srv = {};
+  var _data = {};
+  var url = './mock/comments.json';
+
+  function _logError(reason) {
+    console.error(reason);
+    throw new Error('ERROR: ' + reason);
+  }
+
+  function _cacheAll(response) {
+    _data.cached = _.cloneDeep(response);
+    return _data;
+  }
+
+  function _queryAll() {
+    return $http.get(url).then(_cacheAll).catch(_logError);
+  }
+
+  srv.all = function (options) {
+    if (options.force || _.isEmpty(_data.cached)) {
+      return _queryAll();
+    } else {
+      return Promise.resolve(_data);
+    }
+  };
+
+  return srv;
+}(Vue.http, _);
+
+},{"lodash":1,"vue/dist/vue.js":2}]},{},[3])
+
+
+//# sourceMappingURL=vue-app.js.map

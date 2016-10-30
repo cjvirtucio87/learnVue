@@ -1,15 +1,16 @@
 'use strict';
+import { Post, Comment } from './resources.js';
+const Vue = require('vue/dist/vue.js');
 
-// node's filesystem module
-let fs = require('fs');
-// browserify
-let browserify = require('browserify');
-// requiring modules and plugins to be used with browserify
-let babelify = require('babelify');
+(function Main (Post, Comment) {
+  let posts = Post.all();
+  let comments = Comment.all();
 
-browserify({cache: {}, packageCache: {}, debug: true})
-  .transform(babelify)
-  .require('src/app.js', {entry: true})
-  .bundle()
-  .on('error', err => { console.log('ERROR: ' + err.message); })
-  .pipe(fs.createWriteStream('dist/vue-app.js'));
+  new Vue({
+    el: '#vue-app',
+    data: {
+      posts: posts,
+      comments: comments
+    }
+  });
+})(Post, Comment);
