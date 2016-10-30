@@ -3,7 +3,6 @@ import { Post, Comment } from './resources.js';
 
 const Vue = require('vue/dist/vue.js');
 const $ = require('jquery');
-require('bootstrap');
 
 // Components
 Vue.component('post-li', {
@@ -11,12 +10,26 @@ Vue.component('post-li', {
   template:
   `
   <div class='card'>
-    <div class='card-header'>
-      Post
-    </div>
+    <img class='card-img-top' src='http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg' width='480px' height='300px'>
+
     <div class='card-block'>
       <h4 class='card-title'>{{post.title}}</h4>
       <p class='card-text'>{{post.body}}</p>
+    </div>
+  </div>
+  `
+});
+
+Vue.component('post-show', {
+  props: ['post'],
+  template:
+  `
+  <div class='card'>
+    <div class='card-header'>
+      <&nbsp>
+    </div>
+    <div class='card-block'>
+      <h4 class='card-title'>{{post.title}}
     </div>
   </div>
   `
