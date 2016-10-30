@@ -1,15 +1,18 @@
 [{
   "id": 1,
   "author": "cjvirtucio",
+  "title": "The Title",
   "body": "lorem and stuff"
 },
 {
   "id": 2,
   "author": "torrents",
+  "title": "The Other Title",
   "body": "lorem and other stuff"
 },
 {
   "id": 1,
   "author": "cjvirtucio",
+  "title": "The Third Title",
   "body": "more lorem and more stuff"
 }]
