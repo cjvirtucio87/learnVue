@@ -1,20 +1,20 @@
 'use strict';
-const Vue = require('vue/dist/vue.js');
 const _ = require('lodash');
+const $ = require('jquery');
 
 // HTTP
-export const Post = (function ($http, _) {
+export const Post = (function ($, _) {
   let srv = {};
   let _data = {};
   const url = './mock/posts.json';
 
   function _cacheAll (response) {
-    _data.cached = _.cloneDeep(response);
+    _data.cached = JSON.parse(response);
     return _data;
   }
 
   function _queryAll () {
-    return $http.get(url)
+    return $.get(url)
       .then(_cacheAll)
       .catch(_logError);
   }
@@ -33,9 +33,9 @@ export const Post = (function ($http, _) {
   };
 
   return srv;
-})(Vue.http, _);
+})($, _);
 
-export const Comment = (function ($http, _) {
+export const Comment = (function ($, _) {
   let srv = {};
   let _data = {};
   const url = './mock/comments.json';
@@ -46,18 +46,18 @@ export const Comment = (function ($http, _) {
   }
 
   function _cacheAll (response) {
-    _data.cached = _.cloneDeep (response);
+    _data.cached = JSON.parse(response);
     return _data;
   }
 
   function _queryAll () {
-    return $http.get(url)
+    return $.get(url)
       .then(_cacheAll)
       .catch(_logError);
   }
 
   srv.all = function (options) {
-    if (options.force || _.isEmpty(_data.cached)) {
+    if ((options && options.force) || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
       return Promise.resolve(_data);
@@ -65,4 +65,4 @@ export const Comment = (function ($http, _) {
   };
 
   return srv;
-})(Vue.http, _);
+})($, _);

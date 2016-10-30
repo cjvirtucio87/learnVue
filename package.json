@@ -20,7 +20,6 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vue": "^2.0.3",
-    "vue-resource": "^1.0.3",
     "watchify": "^3.7.0"
   }
 }
