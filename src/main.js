@@ -20,8 +20,8 @@ const Main = (function ($, Post, Comment, components) {
       el: '#vue-app',
       data: {
         selected: undefined,
-        posts: _posts,
-        comments: _comments
+        posts: _posts.cached,
+        comments: _comments.cached
       },
       components: components
     });

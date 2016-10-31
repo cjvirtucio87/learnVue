@@ -34730,6 +34730,8 @@ return Vue$3;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var _ = require('lodash');
+
 var postItem = exports.postItem = function () {
   return {
     props: ['post'],
@@ -34747,30 +34749,43 @@ var postItem = exports.postItem = function () {
 var postShow = exports.postShow = function () {
   return {
     props: ['post'],
-    template: '\n    <div class=\'card\'>\n      <div class=\'card-header\'>\n        <&nbsp>\n      </div>\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n        <p class=\'card-text\'>{{post.body}}</p>\n      </div>\n    </div>\n    '
+    template: '\n    <div class=\'card\'>\n      <div class=\'card-header\'>\n      </div>\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n        <p class=\'card-text\'>{{post.body}}</p>\n      </div>\n    </div>\n    '
   };
 }();
 
-var postList = exports.postList = function (postItem) {
+var postList = exports.postList = function (postItem, postShow) {
   return {
     props: ['posts'],
     data: function data() {
       return { selected: undefined };
     },
     components: {
-      'post-item': postItem
+      'post-item': postItem,
+      'post-show': postShow
     },
     methods: {
       setSelected: function setSelected(id) {
         var vm = this;
         vm.selected = id;
+      },
+      unselected: function unselected(posts) {
+        var vm = this;
+        if (vm.selected) {
+          return _.filter(posts, { id: vm.selected });
+        } else {
+          return posts;
+        }
+      },
+      matchSelected: function matchSelected(id) {
+        var vm = this;
+        return vm.selected === id;
       }
     },
-    template: '\n    <ul>\n      <post-item v-for=\'post in posts.cached\' :post=\'post\' @post-selected=\'setSelected\'></post-item>\n    </ul>\n    '
+    template: '\n    <ul>\n      <template v-for=\'post in unselected(posts)\' >\n        <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n        <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n      </template>\n    </ul>\n    '
   };
-}(postItem);
+}(postItem, postShow);
 
-},{}],5:[function(require,module,exports){
+},{"lodash":2}],5:[function(require,module,exports){
 'use strict';
 
 var _resources = require('./resources.js');
@@ -34803,8 +34818,8 @@ var Main = function ($, Post, Comment, components) {
       el: '#vue-app',
       data: {
         selected: undefined,
-        posts: _posts,
-        comments: _comments
+        posts: _posts.cached,
+        comments: _comments.cached
       },
       components: components
     });

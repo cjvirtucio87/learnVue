@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 export const postItem = (function () {
   return {
     props: ['post'],
@@ -31,7 +33,6 @@ export const postShow = (function () {
     `
     <div class='card'>
       <div class='card-header'>
-        <&nbsp>
       </div>
       <div class='card-block'>
         <h4 class='card-title'>{{post.title}}</h4>
@@ -42,26 +43,42 @@ export const postShow = (function () {
   };
 })();
 
-export const postList = (function (postItem) {
+export const postList = (function (postItem, postShow) {
   return {
     props: ['posts'],
     data: function () {
       return { selected: undefined };
     },
     components: {
-      'post-item': postItem
+      'post-item': postItem,
+      'post-show': postShow
     },
     methods: {
       setSelected: function (id) {
         let vm = this;
         vm.selected = id;
+      },
+      unselected: function (posts) {
+        let vm = this;
+        if (vm.selected) {
+          return _.filter(posts, {id: vm.selected});
+        } else {
+          return posts;
+        }
+      },
+      matchSelected: function (id) {
+        let vm = this;
+        return vm.selected === id;
       }
     },
     template:
     `
     <ul>
-      <post-item v-for='post in posts.cached' :post='post' @post-selected='setSelected'></post-item>
+      <template v-for='post in unselected(posts)' >
+        <post-item :post='post' v-if='!selected' @post-selected='setSelected'></post-item>
+        <post-show :post='post' v-if='matchSelected(post.id)'></post-show>
+      </template>
     </ul>
     `
   };
-})(postItem);
+})(postItem, postShow);
