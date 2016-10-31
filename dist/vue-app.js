@@ -34730,62 +34730,17 @@ return Vue$3;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var _ = require('lodash');
 
-var postItem = exports.postItem = function () {
-  return {
-    props: ['post'],
-    methods: {
-      onSelect: function onSelect() {
-        // A method should be passed to the template as a regular callback, unlike Angular.
-        var vm = this;
-        vm.$emit('post-selected', vm.post.id);
-      }
-    },
-    template: '\n    <div class=\'card\'>\n      <a @click=\'onSelect\'>\n        <img class=\'card-img-top\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\' width=\'480px\' height=\'300px\'>\n      </a>\n\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n        <p class=\'card-text\'>{{post.body}}</p>\n      </div>\n    </div>\n    '
-  };
-}();
+var _post_list = require('./posts/post_list.js');
 
-var postShow = exports.postShow = function () {
-  return {
-    props: ['post'],
-    template: '\n    <div class=\'card\'>\n      <div class=\'card-header\'>\n      </div>\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n        <p class=\'card-text\'>{{post.body}}</p>\n      </div>\n    </div>\n    '
-  };
-}();
+Object.defineProperty(exports, 'postList', {
+  enumerable: true,
+  get: function get() {
+    return _post_list.postList;
+  }
+});
 
-var postList = exports.postList = function (postItem, postShow) {
-  return {
-    props: ['posts'],
-    data: function data() {
-      return { selected: undefined };
-    },
-    components: {
-      'post-item': postItem,
-      'post-show': postShow
-    },
-    methods: {
-      setSelected: function setSelected(id) {
-        var vm = this;
-        vm.selected = id;
-      },
-      unselected: function unselected(posts) {
-        var vm = this;
-        if (vm.selected) {
-          return _.filter(posts, { id: vm.selected });
-        } else {
-          return posts;
-        }
-      },
-      matchSelected: function matchSelected(id) {
-        var vm = this;
-        return vm.selected === id;
-      }
-    },
-    template: '\n    <ul>\n      <template v-for=\'post in unselected(posts)\' >\n        <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n        <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n      </template>\n    </ul>\n    '
-  };
-}(postItem, postShow);
-
-},{"lodash":2}],5:[function(require,module,exports){
+},{"./posts/post_list.js":7}],5:[function(require,module,exports){
 'use strict';
 
 var _resources = require('./resources.js');
@@ -34817,11 +34772,12 @@ var Main = function ($, Post, Comment, components) {
     return new Vue({
       el: '#vue-app',
       data: {
-        selected: undefined,
         posts: _posts.cached,
         comments: _comments.cached
       },
-      components: components
+      components: {
+        'post-list': components.postList
+      }
     });
   }
 
@@ -34834,7 +34790,103 @@ var Main = function ($, Post, Comment, components) {
 
 Main.init();
 
-},{"./components.js":4,"./resources.js":6,"jquery":1,"vue/dist/vue.js":3}],6:[function(require,module,exports){
+},{"./components.js":4,"./resources.js":9,"jquery":1,"vue/dist/vue.js":3}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var postItem = exports.postItem = function () {
+  return {
+    props: ['post'],
+    methods: {
+      onSelect: function onSelect() {
+        // Don't call onSelect because you're waiting for the click event.
+        var vm = this;
+        vm.$emit('post-selected', vm.post.id);
+      }
+    },
+    template: '\n    <div class=\'card\'>\n      <a @click=\'onSelect\'>\n        <img class=\'card-img-top img-fluid\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\'>\n      </a>\n\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n      </div>\n    </div>\n    '
+  };
+}();
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.postList = undefined;
+
+var _post_item = require('./post_item.js');
+
+var _post_show = require('./post_show.js');
+
+var _ = require('lodash');
+var postList = exports.postList = function (postItem, postShow) {
+  return {
+    props: ['posts'],
+    data: function data() {
+      return {
+        selected: undefined,
+        newPost: {
+          id: undefined,
+          author: undefined,
+          title: undefined,
+          body: undefined
+        }
+      };
+    },
+    components: {
+      'post-item': postItem,
+      'post-show': postShow
+    },
+    methods: {
+      // Don't call setSelected yet because you're waiting for the message from the post-item.
+      setSelected: function setSelected(id) {
+        var vm = this;
+        vm.selected = id;
+      },
+      // Call this right away because you're filtering posts.
+      unselected: function unselected(posts) {
+        var vm = this;
+        if (vm.selected) {
+          return _.filter(posts, { id: vm.selected });
+        } else {
+          return posts;
+        }
+      },
+      // Call this right away because you want to only show the matching post.
+      matchSelected: function matchSelected(id) {
+        var vm = this;
+        return vm.selected === id;
+      },
+      addPost: function addPost(formData) {
+        var vm = this;
+        var newPost = _.deepCopy(formData);
+        newPost.id = _.chain(vm.posts).map('id').max().value();
+        vm.posts.push(newPost);
+      }
+    },
+    template: '\n    <ul>\n      <template v-for=\'post in unselected(posts)\' >\n        <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n        <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n      </template>\n    </ul>\n    '
+  };
+}(_post_item.postItem, _post_show.postShow);
+
+},{"./post_item.js":6,"./post_show.js":8,"lodash":2}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function () {
+  return {
+    props: ['post'],
+    template: '\n    <div class=\'card\'>\n      <div class=\'card-header\'>\n      </div>\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n        <p class=\'card-text\'>{{post.body}}</p>\n      </div>\n    </div>\n    '
+  };
+}();
+
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

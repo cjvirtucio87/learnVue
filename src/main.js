@@ -19,11 +19,12 @@ const Main = (function ($, Post, Comment, components) {
     return new Vue({
       el: '#vue-app',
       data: {
-        selected: undefined,
         posts: _posts.cached,
-        comments: _comments.cached
+        comments: _comments.cached,
       },
-      components: components
+      components: {
+        'post-list': components.postList
+      }
     });
   }
 
