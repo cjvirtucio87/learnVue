@@ -34868,7 +34868,7 @@ var postList = exports.postList = {
       vm.posts.unshift(newPost);
     }
   },
-  template: '\n  <div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <post-new :new-post=\'newPost\' @post-create=\'addPost\'></post-new>\n      </div>\n    </div>\n    <div class=\'row\'>\n      <template v-for=\'post in unselected(posts)\'>\n        <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n          <transition name=\'fade\'>\n            <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n            <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n          </transition>\n        </div>\n      </template>\n    </div>\n  </div>\n  '
+  template: '\n  <div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <post-new :new-post=\'newPost\' @post-create=\'addPost\'></post-new>\n      </div>\n    </div>\n    <div class=\'row\'>\n      <transition-group name=\'posts\'>\n        <template v-for=\'post in unselected(posts)\'>\n          <div class=\'col-md-6 offset-md-3 col-xs-12\' :key=\'post\'>\n            <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n            <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n          </div>\n        </template>\n      </transition-group>\n    </div>\n  </div>\n  '
 };
 
 },{"./post_item.js":6,"./post_new.js":8,"./post_show.js":9,"lodash":2}],8:[function(require,module,exports){

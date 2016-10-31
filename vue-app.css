@@ -5,3 +5,11 @@
 .fade-enter, .fade-leave-active {
   opacity: 0;
 }
+
+.posts-enter-active, .posts-leave-active {
+  transition: all 1s;
+}
+
+.posts-enter, .posts-leave-active {
+  opacity: 0;
+}
