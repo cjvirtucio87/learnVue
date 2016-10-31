@@ -61,14 +61,16 @@ export const postList = {
       </div>
     </div>
     <div class='row'>
-      <transition-group name='posts'>
-        <template v-for='post in unselected(posts)'>
-          <div class='col-md-6 offset-md-3 col-xs-12' :key='post'>
-            <post-item :post='post' v-if='!selected' @post-selected='setSelected'></post-item>
-            <post-show :post='post' v-if='matchSelected(post.id)'></post-show>
-          </div>
-        </template>
-      </transition-group>
+      <div class='col-md-6 offset-md-3 col-xs-12'>
+        <transition-group name='posts'>
+          <template>
+            <div v-for='post in unselected(posts)' :key='post'>
+              <post-item :post='post' v-if='!selected' @post-selected='setSelected'></post-item>
+              <post-show :post='post' v-if='matchSelected(post.id)'></post-show>
+            </div>
+          </template>
+        </transition-group>
+      </div>
     </div>
   </div>
   `
