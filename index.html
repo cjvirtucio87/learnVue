@@ -12,14 +12,7 @@
     <div id="vue-app">
       <div class='container'>
         <div class='col-md-6 offset-md-3'>
-          <!-- the page lists the posts -->
-          <!-- click a post, and it gets marked as 'selected' -->
-          <!-- when there is a selected post, that one gets shown -->
-          <!-- otherwise, all the other posts get shown -->
-          <ul v-for="post in posts.cached">
-            <post-li v-if='!selected' v-bind:onSelect='selectPost($event)' v-bind:post='post'></post-li>
-            <post-show v-if='matchSelected(post.id)' v-bind:post='post'></post-li>
-          </ul>
+          <post-list :posts='posts'></post-list>
         </div>
       </div>
     </div>

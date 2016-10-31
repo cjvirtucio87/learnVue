@@ -34727,72 +34727,99 @@ return Vue$3;
 },{}],4:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var postItem = exports.postItem = function () {
+  return {
+    props: ['post'],
+    methods: {
+      onSelect: function onSelect() {
+        // A method should be passed to the template as a regular callback, unlike Angular.
+        var vm = this;
+        vm.$emit('post-selected', vm.post.id);
+      }
+    },
+    template: '\n    <div class=\'card\'>\n      <a @click=\'onSelect\'>\n        <img class=\'card-img-top\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\' width=\'480px\' height=\'300px\'>\n      </a>\n\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n        <p class=\'card-text\'>{{post.body}}</p>\n      </div>\n    </div>\n    '
+  };
+}();
+
+var postShow = exports.postShow = function () {
+  return {
+    props: ['post'],
+    template: '\n    <div class=\'card\'>\n      <div class=\'card-header\'>\n        <&nbsp>\n      </div>\n      <div class=\'card-block\'>\n        <h4 class=\'card-title\'>{{post.title}}</h4>\n        <p class=\'card-text\'>{{post.body}}</p>\n      </div>\n    </div>\n    '
+  };
+}();
+
+var postList = exports.postList = function (postItem) {
+  return {
+    props: ['posts'],
+    data: function data() {
+      return { selected: undefined };
+    },
+    components: {
+      'post-item': postItem
+    },
+    methods: {
+      setSelected: function setSelected(id) {
+        var vm = this;
+        vm.selected = id;
+      }
+    },
+    template: '\n    <ul>\n      <post-item v-for=\'post in posts.cached\' :post=\'post\' @post-selected=\'setSelected\'></post-item>\n    </ul>\n    '
+  };
+}(postItem);
+
+},{}],5:[function(require,module,exports){
+'use strict';
+
 var _resources = require('./resources.js');
+
+var resources = _interopRequireWildcard(_resources);
+
+var _components = require('./components.js');
+
+var components = _interopRequireWildcard(_components);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var Vue = require('vue/dist/vue.js');
 var $ = require('jquery');
 
-// Components
-var postLI = {
-  props: ['post', 'onSelect'],
-  template: '\n  <div class=\'card\'>\n    <a v-on:click=\'onSelect({$event: post.id})\'>\n      <img class=\'card-img-top\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\' width=\'480px\' height=\'300px\'>\n    </a>\n\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n      <p class=\'card-text\'>{{post.body}}</p>\n    </div>\n  </div>\n  '
-};
-
-var postShow = {
-  props: ['post'],
-  template: '\n  <div class=\'card\'>\n    <div class=\'card-header\'>\n      <&nbsp>\n    </div>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n      <p class=\'card-text\'>{{post.body}}</p>\n    </div>\n  </div>\n  '
-};
-
-// Bootstrap application
-var Main = function ($, Post, Comment) {
+// Bootstrapping the application
+var Main = function ($, Post, Comment, components) {
   var _posts = void 0,
       _comments = void 0,
       main = void 0;
   main = {};
 
+  function _cacheResponses(responses) {
+    _posts = responses[0];
+    _comments = responses[1];
+  }
+
   function _instantiate() {
-    new Vue({
+    return new Vue({
       el: '#vue-app',
       data: {
         selected: undefined,
         posts: _posts,
         comments: _comments
       },
-      computed: {
-        matchSelected: function matchSelected(postId) {
-          return function () {
-            return this.selected === postId;
-          };
-        },
-        clearSelect: function clearSelect() {
-          this.selected = undefined;
-        }
-      },
-      methods: {
-        selectPost: function selectPost($event) {
-          this.selected = $event.postId;
-        }
-      },
-      components: {
-        'post-li': postLI,
-        'post-show': postShow
-      }
+      components: components
     });
   }
 
   main.init = function () {
-    Promise.all([Post.all(), Comment.all()]).then(function (responses) {
-      _posts = responses[0];
-      _comments = responses[1];
-    }).then(_instantiate);
+    Promise.all([Post.all(), Comment.all()]).then(_cacheResponses).then(_instantiate);
   };
 
   return main;
-}($, _resources.Post, _resources.Comment);
+}($, resources.Post, resources.Comment, components);
 
 Main.init();
 
-},{"./resources.js":5,"jquery":1,"vue/dist/vue.js":3}],5:[function(require,module,exports){
+},{"./components.js":4,"./resources.js":6,"jquery":1,"vue/dist/vue.js":3}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34862,7 +34889,7 @@ var Comment = exports.Comment = function ($, _) {
   return srv;
 }($, _);
 
-},{"jquery":1,"lodash":2}]},{},[4])
+},{"jquery":1,"lodash":2}]},{},[5])
 
 
 //# sourceMappingURL=vue-app.js.map
