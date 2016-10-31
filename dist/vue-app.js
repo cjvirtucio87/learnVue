@@ -34886,7 +34886,7 @@ var postNew = exports.postNew = {
       vm.$emit('post-create', vm.newPost);
     }
   },
-  template: '\n  <form>\n    <input type=\'text\' placeholder=\'Title\' v-model=\'newPost.title\'><br>\n    <input type=\'text\' placeholder=\'Body\' v-model=\'newPost.body\'><br>\n    <input type=\'submit\' @click.prevent=\'onCreate()\' value=\'submit\'></input>\n  </form>\n  '
+  template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>New Post</h4>\n      <form>\n        <div class=\'form-group\'>\n          <input type=\'text\' class=\'form-control\' placeholder=\'Title\' v-model=\'newPost.title\'><br>\n          <textarea class=\'form-control\' placeholder=\'Body\' v-model=\'newPost.body\'></textarea><br>\n          <input type=\'submit\' class=\'btn btn-success float-xs-right\' @click.prevent=\'onCreate()\' value=\'submit\'></input>\n        </div>\n      </form>\n    </div>\n  </div>\n  '
 };
 
 },{}],9:[function(require,module,exports){
