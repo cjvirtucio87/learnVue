@@ -34805,7 +34805,7 @@ var postItem = exports.postItem = {
       vm.$emit('post-selected', vm.post.id);
     }
   },
-  template: '\n  <div class=\'card\'>\n    <a @click=\'onSelect\'>\n      <img class=\'card-img-top img-fluid\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\'>\n    </a>\n\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n    </div>\n  </div>\n  '
+  template: '\n  <div class=\'card\'>\n    <a @click=\'onSelect\'>\n      <img class=\'img-fluid\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\'>\n    </a>\n\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n    </div>\n  </div>\n  '
 };
 
 },{}],7:[function(require,module,exports){
@@ -34869,7 +34869,7 @@ var postList = exports.postList = {
       vm.posts.push(newPost);
     }
   },
-  template: '\n  <div>\n    <post-new :new-post=\'newPost\' @post-create=\'addPost\'></post-new>\n    <template v-for=\'post in unselected(posts)\'>\n      <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n      <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n    </template>\n  </div>\n  '
+  template: '\n  <div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <post-new  :new-post=\'newPost\' @post-create=\'addPost\'></post-new>\n      </div>\n    </div>\n    <div class=\'row\'>\n      <template v-for=\'post in unselected(posts)\'>\n        <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n          <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n          <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n        </div>\n      </template>\n    </div>\n  </div>\n  '
 };
 
 },{"./post_item.js":6,"./post_new.js":8,"./post_show.js":9,"lodash":2}],8:[function(require,module,exports){
@@ -34886,7 +34886,7 @@ var postNew = exports.postNew = {
       vm.$emit('post-create', vm.newPost);
     }
   },
-  template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>New Post</h4>\n      <form>\n        <div class=\'form-group\'>\n          <input type=\'text\' class=\'form-control\' placeholder=\'Title\' v-model=\'newPost.title\'><br>\n          <textarea class=\'form-control\' placeholder=\'Body\' v-model=\'newPost.body\'></textarea><br>\n          <input type=\'submit\' class=\'btn btn-success float-xs-right\' @click.prevent=\'onCreate()\' value=\'submit\'></input>\n        </div>\n      </form>\n    </div>\n  </div>\n  '
+  template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>New Post</h4>\n      <form>\n        <div class=\'form-group\'>\n          <input type=\'text\' class=\'form-control\' placeholder=\'Title\' v-model=\'newPost.title\'><br>\n          <textarea class=\'form-control\' placeholder=\'Body\' v-model=\'newPost.body\' rows=\'5\'></textarea><br>\n          <input type=\'submit\' class=\'btn btn-success float-xs-right\' @click.prevent=\'onCreate()\' value=\'submit\'></input>\n        </div>\n      </form>\n    </div>\n  </div>\n  '
 };
 
 },{}],9:[function(require,module,exports){

@@ -12,7 +12,7 @@ export const postItem = {
   `
   <div class='card'>
     <a @click='onSelect'>
-      <img class='card-img-top img-fluid' src='http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg'>
+      <img class='img-fluid' src='http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg'>
     </a>
 
     <div class='card-block'>

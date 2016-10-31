@@ -56,11 +56,19 @@ export const postList = {
   template:
   `
   <div>
-    <post-new :new-post='newPost' @post-create='addPost'></post-new>
-    <template v-for='post in unselected(posts)'>
-      <post-item :post='post' v-if='!selected' @post-selected='setSelected'></post-item>
-      <post-show :post='post' v-if='matchSelected(post.id)'></post-show>
-    </template>
+    <div class='row'>
+      <div class='col-md-6 offset-md-3 col-xs-12'>
+        <post-new  :new-post='newPost' @post-create='addPost'></post-new>
+      </div>
+    </div>
+    <div class='row'>
+      <template v-for='post in unselected(posts)'>
+        <div class='col-md-6 offset-md-3 col-xs-12'>
+          <post-item :post='post' v-if='!selected' @post-selected='setSelected'></post-item>
+          <post-show :post='post' v-if='matchSelected(post.id)'></post-show>
+        </div>
+      </template>
+    </div>
   </div>
   `
 };
