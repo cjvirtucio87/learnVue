@@ -7,9 +7,13 @@
 }
 
 .posts-enter-active, .posts-leave-active {
-  transition: all 1s;
+  transition: all 0.3s;
 }
 
 .posts-enter, .posts-leave-active {
   opacity: 0;
+}
+
+.posts-move {
+  transition: transform 1s;
 }
