@@ -10,12 +10,22 @@ export const postNew = {
   template:
   `
   <div class='card'>
+    <div class='card-header'>
+      <h3 class='card-title'>New Post</h4>
+    </div>
     <div class='card-block'>
-      <h4 class='card-title'>New Post</h4>
       <form>
-        <div class='form-group'>
-          <input type='text' class='form-control' placeholder='Title' v-model='newPost.title'><br>
-          <textarea class='form-control' placeholder='Body' v-model='newPost.body' rows='5'></textarea><br>
+        <div class='md-form'>
+          <label for='new-title'>Title</label>
+          <input id='new-title' type='text' v-model='newPost.title'><br>
+        </div>
+
+        <div class='md-form'>
+          <label for='new-body'>Body</label>
+          <textarea id='new-body' class='md-textarea' v-model='newPost.body' rows='5'></textarea><br>
+        </div>
+
+        <div class='md-form'>
           <input type='submit' class='btn btn-success float-xs-right' @click.prevent='onCreate()' value='submit'></input>
         </div>
       </form>

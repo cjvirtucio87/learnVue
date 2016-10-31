@@ -44,13 +44,12 @@ export const postList = {
     },
     addPost: function (formData) {
       let vm = this;
-      console.log(formData);
       let newPost = _.cloneDeep(formData);
       newPost.id = _.chain(vm.posts)
                     .map('id')
                     .max()
                     .value();
-      vm.posts.push(newPost);
+      vm.posts.unshift(newPost);
     }
   },
   template:

@@ -34863,10 +34863,9 @@ var postList = exports.postList = {
     },
     addPost: function addPost(formData) {
       var vm = this;
-      console.log(formData);
       var newPost = _.cloneDeep(formData);
       newPost.id = _.chain(vm.posts).map('id').max().value();
-      vm.posts.push(newPost);
+      vm.posts.unshift(newPost);
     }
   },
   template: '\n  <div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <post-new  :new-post=\'newPost\' @post-create=\'addPost\'></post-new>\n      </div>\n    </div>\n    <div class=\'row\'>\n      <template v-for=\'post in unselected(posts)\'>\n        <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n          <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n          <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n        </div>\n      </template>\n    </div>\n  </div>\n  '
@@ -34886,7 +34885,7 @@ var postNew = exports.postNew = {
       vm.$emit('post-create', vm.newPost);
     }
   },
-  template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>New Post</h4>\n      <form>\n        <div class=\'form-group\'>\n          <input type=\'text\' class=\'form-control\' placeholder=\'Title\' v-model=\'newPost.title\'><br>\n          <textarea class=\'form-control\' placeholder=\'Body\' v-model=\'newPost.body\' rows=\'5\'></textarea><br>\n          <input type=\'submit\' class=\'btn btn-success float-xs-right\' @click.prevent=\'onCreate()\' value=\'submit\'></input>\n        </div>\n      </form>\n    </div>\n  </div>\n  '
+  template: '\n  <div class=\'card\'>\n    <div class=\'card-header\'>\n      <h3 class=\'card-title\'>New Post</h4>\n    </div>\n    <div class=\'card-block\'>\n      <form>\n        <div class=\'md-form\'>\n          <label for=\'new-title\'>Title</label>\n          <input id=\'new-title\' type=\'text\' v-model=\'newPost.title\'><br>\n        </div>\n\n        <div class=\'md-form\'>\n          <label for=\'new-body\'>Body</label>\n          <textarea id=\'new-body\' class=\'md-textarea\' v-model=\'newPost.body\' rows=\'5\'></textarea><br>\n        </div>\n\n        <div class=\'md-form\'>\n          <input type=\'submit\' class=\'btn btn-success float-xs-right\' @click.prevent=\'onCreate()\' value=\'submit\'></input>\n        </div>\n      </form>\n    </div>\n  </div>\n  '
 };
 
 },{}],9:[function(require,module,exports){
