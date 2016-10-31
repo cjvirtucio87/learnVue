@@ -34733,15 +34733,15 @@ var Vue = require('vue/dist/vue.js');
 var $ = require('jquery');
 
 // Components
-Vue.component('post-li', {
-  props: ['post'],
-  template: '\n  <div class=\'card\'>\n    <img class=\'card-img-top\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\' width=\'480px\' height=\'300px\'>\n\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n      <p class=\'card-text\'>{{post.body}}</p>\n    </div>\n  </div>\n  '
-});
+var postLI = {
+  props: ['post', 'onSelect'],
+  template: '\n  <div class=\'card\'>\n    <a v-on:click=\'onSelect({$event: post.id})\'>\n      <img class=\'card-img-top\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\' width=\'480px\' height=\'300px\'>\n    </a>\n\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n      <p class=\'card-text\'>{{post.body}}</p>\n    </div>\n  </div>\n  '
+};
 
-Vue.component('post-show', {
+var postShow = {
   props: ['post'],
-  template: '\n  <div class=\'card\'>\n    <div class=\'card-header\'>\n      <&nbsp>\n    </div>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}\n    </div>\n  </div>\n  '
-});
+  template: '\n  <div class=\'card\'>\n    <div class=\'card-header\'>\n      <&nbsp>\n    </div>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n      <p class=\'card-text\'>{{post.body}}</p>\n    </div>\n  </div>\n  '
+};
 
 // Bootstrap application
 var Main = function ($, Post, Comment) {
@@ -34754,8 +34754,28 @@ var Main = function ($, Post, Comment) {
     new Vue({
       el: '#vue-app',
       data: {
+        selected: undefined,
         posts: _posts,
         comments: _comments
+      },
+      computed: {
+        matchSelected: function matchSelected(postId) {
+          return function () {
+            return this.selected === postId;
+          };
+        },
+        clearSelect: function clearSelect() {
+          this.selected = undefined;
+        }
+      },
+      methods: {
+        selectPost: function selectPost($event) {
+          this.selected = $event.postId;
+        }
+      },
+      components: {
+        'post-li': postLI,
+        'post-show': postShow
       }
     });
   }

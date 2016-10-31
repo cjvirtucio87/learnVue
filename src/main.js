@@ -5,12 +5,14 @@ const Vue = require('vue/dist/vue.js');
 const $ = require('jquery');
 
 // Components
-Vue.component('post-li', {
-  props: ['post'],
+const postLI = {
+  props: ['post', 'onSelect'],
   template:
   `
   <div class='card'>
-    <img class='card-img-top' src='http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg' width='480px' height='300px'>
+    <a v-on:click='onSelect({$event: post.id})'>
+      <img class='card-img-top' src='http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg' width='480px' height='300px'>
+    </a>
 
     <div class='card-block'>
       <h4 class='card-title'>{{post.title}}</h4>
@@ -18,9 +20,9 @@ Vue.component('post-li', {
     </div>
   </div>
   `
-});
+};
 
-Vue.component('post-show', {
+const postShow = {
   props: ['post'],
   template:
   `
@@ -29,11 +31,12 @@ Vue.component('post-show', {
       <&nbsp>
     </div>
     <div class='card-block'>
-      <h4 class='card-title'>{{post.title}}
+      <h4 class='card-title'>{{post.title}}</h4>
+      <p class='card-text'>{{post.body}}</p>
     </div>
   </div>
   `
-});
+};
 
 // Bootstrap application
 const Main = (function ($, Post, Comment) {
@@ -44,8 +47,28 @@ const Main = (function ($, Post, Comment) {
     new Vue({
       el: '#vue-app',
       data: {
+        selected: undefined,
         posts: _posts,
         comments: _comments
+      },
+      computed: {
+        matchSelected: function (postId) {
+          return function () {
+            return this.selected === postId;
+          };
+        },
+        clearSelect: function () {
+          this.selected = undefined;
+        }
+      },
+      methods: {
+        selectPost: function ($event) {
+          this.selected = $event.postId;
+        },
+      },
+      components: {
+        'post-li': postLI,
+        'post-show': postShow
       }
     });
   }
