@@ -34864,7 +34864,7 @@ var postList = exports.postList = {
     addPost: function addPost(formData) {
       var vm = this;
       var newPost = _.cloneDeep(formData);
-      newPost.id = _.chain(vm.posts).map('id').max().value();
+      newPost.id = _.chain(vm.posts).map('id').max().add(1).value();
       vm.posts.unshift(newPost);
     }
   },

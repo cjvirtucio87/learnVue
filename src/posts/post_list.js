@@ -48,6 +48,7 @@ export const postList = {
       newPost.id = _.chain(vm.posts)
                     .map('id')
                     .max()
+                    .add(1)
                     .value();
       vm.posts.unshift(newPost);
     }
