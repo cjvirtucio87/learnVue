@@ -34866,6 +34866,9 @@ var postList = exports.postList = {
       var newPost = _.cloneDeep(formData);
       newPost.id = _.chain(vm.posts).map('id').max().add(1).value();
       vm.posts.unshift(newPost);
+      Object.keys(vm.newPost).forEach(function (key) {
+        vm.newPost[key] = undefined;
+      });
     }
   },
   template: '\n  <div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <post-new :new-post=\'newPost\' @post-create=\'addPost\'></post-new>\n      </div>\n    </div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <transition-group name=\'posts\'>\n          <template>\n            <div v-for=\'post in unselected(posts)\' :key=\'post\'>\n              <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n              <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n            </div>\n          </template>\n        </transition-group>\n      </div>\n    </div>\n  </div>\n  '
