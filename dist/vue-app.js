@@ -46348,7 +46348,7 @@ var Main = function (Post, Comment, postList) {
   }
 
   function _initResources(vm) {
-    return Promise.all([Post.init(), Comment.all()]).then(_storeResources(vm));
+    return Promise.all([Post.all(), Comment.all()]).then(_storeResources(vm));
   }
 
   main.init = function () {
@@ -46410,9 +46410,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
@@ -46451,9 +46451,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
@@ -46485,8 +46485,6 @@ var filters = _interopRequireWildcard(_filters);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var Vue = require('vue');
-
 function _create(params) {
   _post_service.Post.create(params);
 }
@@ -46513,11 +46511,10 @@ function _select(id) {
 }
 
 function _initData() {
-  var data = {};
-  data.selected = undefined;
-  data.newPost = _post_service.Post.new();
-  console.log(data.newPost);
-  return data;
+  var vm = this;
+  vm.selected = undefined;
+  vm.newPost = _post_service.Post.new();
+  console.log(vm.newPost);
 }
 
 exports.default = {
@@ -46525,9 +46522,7 @@ exports.default = {
   props: {
     posts: Array
   },
-  data: function data() {
-    return _initData();
-  },
+  created: _initData,
   components: {
     'post-new': postNew,
     'post-edit': postEdit,
@@ -46595,9 +46590,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
@@ -46632,6 +46627,7 @@ var Post = exports.Post = function ($, _) {
   }
 
   function _initNewID() {
+    console.log(_.isEmpty(_data.cached));
     return _.chain(_data.cached).map('id').max().value() + 1;
   }
 
@@ -46664,6 +46660,7 @@ var Post = exports.Post = function ($, _) {
     if (options && options.force || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
+      console.log(_data.newPost);
       return Promise.resolve(_data);
     }
   };
@@ -46682,6 +46679,7 @@ var Post = exports.Post = function ($, _) {
   };
 
   srv.new = function () {
+    _initNewPost();
     return _data.newPost;
   };
 
@@ -46689,12 +46687,6 @@ var Post = exports.Post = function ($, _) {
     var post = srv.where({ id: params.id });
     _.cloneDeep(params, post);
     return post;
-  };
-
-  srv.init = function () {
-    return srv.all().then(function (data) {
-      _initNewPost();return data;
-    });
   };
 
   return srv;

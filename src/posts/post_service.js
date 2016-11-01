@@ -24,6 +24,7 @@ export const Post = (function ($, _) {
   }
 
   function _initNewID () {
+    console.log(_.isEmpty(_data.cached));
     return _.chain(_data.cached)
              .map('id')
              .max()
@@ -63,6 +64,7 @@ export const Post = (function ($, _) {
     if ((options && options.force) || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
+      console.log(_data.newPost);
       return Promise.resolve(_data);
     }
   };
@@ -83,6 +85,7 @@ export const Post = (function ($, _) {
   };
 
   srv.new = function () {
+    _initNewPost();
     return _data.newPost;
   };
 
@@ -90,10 +93,6 @@ export const Post = (function ($, _) {
     const post = srv.where({ id: params.id });
     _.cloneDeep(params, post);
     return post;
-  };
-
-  srv.init = function () {
-    return srv.all().then((data) => { _initNewPost(); return data; });
   };
 
   return srv;

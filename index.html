@@ -10,7 +10,8 @@
 
     <div id="vue-app">
       <div class='container'>
-        <post-list :posts='posts'></post-list>
+        <!-- add a v-if if you're waiting for data to be loaded -->
+        <post-list v-if='posts && posts.length' :posts='posts'></post-list>
       </div>
     </div>
 

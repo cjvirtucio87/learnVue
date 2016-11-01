@@ -15,8 +15,6 @@
 </template>
 
 <script>
-  const Vue = require('vue');
-
   // Post components
   import * as postItem from './post_item.vue';
   import * as postNew from './post_new.vue';
@@ -51,11 +49,10 @@
   }
 
   function _initData () {
-    const data = {};
-    data.selected = undefined;
-    data.newPost = Post.new();
-    console.log(data.newPost);
-    return data;
+    const vm = this;
+    vm.selected = undefined;
+    vm.newPost = Post.new();
+    console.log(vm.newPost);
   }
 
   export default {
@@ -63,9 +60,7 @@
     props: {
       posts: Array
     },
-    data: function () {
-      return _initData();
-    },
+    created: _initData,
     components: {
       'post-new': postNew,
       'post-edit': postEdit,
