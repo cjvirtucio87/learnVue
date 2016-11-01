@@ -4,7 +4,7 @@
       <h3 class='card-title'>{{post.title}}</h3>
       <p class='card-text'>{{post.body}}</p>
 
-      <comment-list :comments='getComments()'></comment-list>
+      <comment-list :comments='comments'></comment-list>
     </div>
   </div>
 </template>
@@ -19,7 +19,7 @@
 
   function _getComments () {
     const vm = this;
-    return Comment.where({ commentable_id: vm.post.id, commentable_type: 'post' });
+    vm.comments = Comment.where({ commentable_id: vm.post.id, commentable_type: 'post' });
   }
 
   export default {
@@ -33,6 +33,7 @@
         comments: undefined
       };
     },
+    mounted: _getComments,
     components: {
       'comment-list': commentList
     },

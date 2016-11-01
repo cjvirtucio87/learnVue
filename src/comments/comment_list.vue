@@ -1,8 +1,13 @@
 <template>
   <div>
     <div class='row' v-for='comment of comments'>
-      <div class='col-md-6 offset-md-3'>
-        {{comment.id}}
+      <div class='col-md-4'>
+        <div class='card'>
+          <div class='card-block'>
+            <h5 class='text-muted'>comment by {{comment.author}}</h5>
+            <p class='card-text'>{{comment.body}}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
