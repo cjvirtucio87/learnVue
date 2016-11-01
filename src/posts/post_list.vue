@@ -24,7 +24,9 @@
   import * as filters from '../filters.js';
 
   function _create (params) {
+    const vm = this;
     Post.create(params);
+    vm.clearSelect();
   }
 
   function _update (params) {
@@ -46,13 +48,13 @@
   function _select (id) {
     const vm = this;
     vm.selected = id;
+    vm.$forceUpdate();
   }
 
   function _initData () {
     const vm = this;
     vm.selected = undefined;
     vm.newPost = Post.new();
-    console.log(vm.newPost);
   }
 
   export default {
@@ -60,7 +62,15 @@
     props: {
       posts: Array
     },
-    created: _initData,
+    data: function () {
+      return {
+        // Never forget to define your data function. Only the properties defined in the returned
+        // object get to be reactive. Properties defined after instantiation are non-reactive and
+        // require vm.$forceUpdate().
+        newPost: Post.new(),
+        selected: undefined
+      };
+    },
     components: {
       'post-new': postNew,
       'post-edit': postEdit,

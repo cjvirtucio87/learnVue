@@ -24,7 +24,8 @@ const Main = (function (Post, Comment, postList) {
     return new Vue({
       el: '#vue-app',
       data: {
-        posts: undefined
+        posts: undefined,
+        comments: undefined
       },
       components: {
         'post-list': postList

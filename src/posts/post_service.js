@@ -64,7 +64,6 @@ export const Post = (function ($, _) {
     if ((options && options.force) || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      console.log(_data.newPost);
       return Promise.resolve(_data);
     }
   };

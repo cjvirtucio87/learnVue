@@ -1,15 +1,15 @@
 <template>
   <div class='card'>
-    <div class='card-block' style='cursor: pointer;' @click='onSelect(post.id)'>
+    <div class='card-block' style='cursor: pointer;' @click='selectPost'>
       <h3 class='card-title'>{{post.title}}</h3>
       <p class='card-text'>{{post.body}}</p>
     </div>
   </div>
 </template>
 <script>
-  function _toggleEdit () {
+  function _selectPost () {
     const vm = this;
-    vm.onToggle();
+    vm.onSelect(vm.post.id);
   }
 
   export default {
@@ -19,7 +19,7 @@
       onSelect: Function
     },
     methods: {
-      toggleEdit: _toggleEdit
+      selectPost: _selectPost
     }
   };
 </script>

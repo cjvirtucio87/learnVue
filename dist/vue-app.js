@@ -46355,7 +46355,8 @@ var Main = function (Post, Comment, postList) {
     return new Vue({
       el: '#vue-app',
       data: {
-        posts: undefined
+        posts: undefined,
+        comments: undefined
       },
       components: {
         'post-list': postList
@@ -46410,9 +46411,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
@@ -46425,9 +46426,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 
-function _toggleEdit() {
+function _selectPost() {
   var vm = this;
-  vm.onToggle();
+  vm.onSelect(vm.post.id);
 }
 
 exports.default = {
@@ -46437,23 +46438,23 @@ exports.default = {
     onSelect: Function
   },
   methods: {
-    toggleEdit: _toggleEdit
+    selectPost: _selectPost
   }
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block",attrs:{"style":"cursor: pointer;"},on:{"click":function($event){onSelect(post.id)}}},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text"},[_s(post.body)])])])}}
+__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block",attrs:{"style":"cursor: pointer;"},on:{"click":selectPost}},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text"},[_s(post.body)])])])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
@@ -46486,7 +46487,9 @@ var filters = _interopRequireWildcard(_filters);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _create(params) {
+  var vm = this;
   _post_service.Post.create(params);
+  vm.clearSelect();
 }
 
 function _update(params) {
@@ -46508,13 +46511,13 @@ function _clearSelect() {
 function _select(id) {
   var vm = this;
   vm.selected = id;
+  vm.$forceUpdate();
 }
 
 function _initData() {
   var vm = this;
   vm.selected = undefined;
   vm.newPost = _post_service.Post.new();
-  console.log(vm.newPost);
 }
 
 exports.default = {
@@ -46522,7 +46525,12 @@ exports.default = {
   props: {
     posts: Array
   },
-  created: _initData,
+  data: function data() {
+    return {
+      newPost: _post_service.Post.new(),
+      selected: undefined
+    };
+  },
   components: {
     'post-new': postNew,
     'post-edit': postEdit,
@@ -46590,9 +46598,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
@@ -46660,7 +46668,6 @@ var Post = exports.Post = function ($, _) {
     if (options && options.force || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      console.log(_data.newPost);
       return Promise.resolve(_data);
     }
   };
