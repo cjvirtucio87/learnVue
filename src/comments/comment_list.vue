@@ -4,6 +4,7 @@
       <div class='col-md-8'>
         <div class='card'>
           <div class='card-block'>
+            <!-- can't refactor to separate component; leads to circular dependency -->
             <h5 class='text-muted'>comment by {{comment.author}}</h5>
             <p class='card-text'>{{comment.body}}</p>
 

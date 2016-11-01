@@ -15,10 +15,9 @@
 </template>
 
 <script>
-  // Post components
-  import * as postItem from './post_item.vue';
-  import * as postNew from './post_new.vue';
-  import * as postEdit from './post_edit.vue';
+  import postItem from './post_item.vue';
+  import postNew from './post_new.vue';
+  import postEdit from './post_edit.vue';
 
   import { Post } from './post_service.js';
   import * as filters from '../filters.js';
@@ -50,7 +49,7 @@
     vm.selected = id;
     vm.$forceUpdate();
   }
-  
+
   export default {
     name: 'post-list',
     props: {

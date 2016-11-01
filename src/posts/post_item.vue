@@ -1,13 +1,14 @@
 <template>
   <div class='card'>
-    <div class='card-block' style='cursor: pointer;' @click='selectPost'>
+    <div class='card-block' @click='selectPost'>
       <h3 class='card-title'>{{post.title}}</h3>
-      <p class='card-text'>{{post.body}}</p>
+      <p class='card-text' style='cursor: pointer;'>{{post.body}}</p>
 
       <comment-list :comments='comments'></comment-list>
     </div>
   </div>
 </template>
+
 <script>
   import commentList from '../comments/comment_list.vue';
   import { Comment } from '../comments/comment_service.js';

@@ -46507,16 +46507,16 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block",attrs:{"style":"cursor: pointer;"},on:{"click":selectPost}},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text"},[_s(post.body)])," ",_h('comment-list',{attrs:{"comments":comments}})])])}}
+__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block",on:{"click":selectPost}},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text",attrs:{"style":"cursor: pointer;"}},[_s(post.body)])," ",_h('comment-list',{attrs:{"comments":comments}})])])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
@@ -46530,15 +46530,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _post_item = require('./post_item.vue');
 
-var postItem = _interopRequireWildcard(_post_item);
+var _post_item2 = _interopRequireDefault(_post_item);
 
 var _post_new = require('./post_new.vue');
 
-var postNew = _interopRequireWildcard(_post_new);
+var _post_new2 = _interopRequireDefault(_post_new);
 
 var _post_edit = require('./post_edit.vue');
 
-var postEdit = _interopRequireWildcard(_post_edit);
+var _post_edit2 = _interopRequireDefault(_post_edit);
 
 var _post_service = require('./post_service.js');
 
@@ -46547,6 +46547,8 @@ var _filters = require('../filters.js');
 var filters = _interopRequireWildcard(_filters);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _create(params) {
   var vm = this;
@@ -46588,9 +46590,9 @@ exports.default = {
     };
   },
   components: {
-    'post-new': postNew,
-    'post-edit': postEdit,
-    'post-item': postItem
+    'post-new': _post_new2.default,
+    'post-edit': _post_edit2.default,
+    'post-item': _post_item2.default
   },
   methods: {
     createPost: _create,
@@ -46654,9 +46656,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
