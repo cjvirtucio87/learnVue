@@ -12,6 +12,27 @@ export const Comment = (function ($, _) {
     throw new Error('ERROR: ' + reason);
   }
 
+  function _initNewId () {
+    return _.chain(_data.cached)
+            .map('id')
+            .max()
+            .value() + 1;
+  }
+
+  function _initNewComment (commentableId, commentableType) {
+    const newId = _initNewId();
+    const newComment = {
+      id: newId,
+      author: undefined,
+      title: undefined,
+      body: undefined,
+      commentable_id: commentableId,
+      commentable_type: commentableType
+    };
+    _data.newComment = newComment;
+    return _data;
+  }
+
   function _cacheAll (response) {
     _data.cached = JSON.parse(response);
     return _data;
@@ -42,6 +63,11 @@ export const Comment = (function ($, _) {
     const comment = srv.where({ id: params.id });
     _.cloneDeep(params, comment);
     return comment;
+  };
+
+  srv.new = function (commentableId, commentableType) {
+    _initNewComment(commentableId, commentableType);
+    return _data.newComment;
   };
 
   srv.init = function () {

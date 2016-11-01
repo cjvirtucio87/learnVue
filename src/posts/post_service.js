@@ -5,11 +5,13 @@ const Promise = require('bluebird');
 
 export const Post = (function ($, _) {
   const srv = {};
+
   const _data = {
     cached: [],
     created: undefined,
     newPost: undefined
   };
+
   const url = './mock/posts.json';
 
   function _cacheAll (response) {
@@ -24,7 +26,6 @@ export const Post = (function ($, _) {
   }
 
   function _initNewID () {
-    console.log(_.isEmpty(_data.cached));
     return _.chain(_data.cached)
              .map('id')
              .max()

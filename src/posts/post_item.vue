@@ -3,6 +3,7 @@
     <div class='card-block' @click='selectPost'>
       <h3 class='card-title'>{{post.title}}</h3>
       <p class='card-text' style='cursor: pointer;'>{{post.body}}</p>
+      <comment-new :new-comment='newComment' :on-create='createComment'></comment-new>
 
       <comment-list :comments='comments'></comment-list>
     </div>
@@ -11,6 +12,7 @@
 
 <script>
   import commentList from '../comments/comment_list.vue';
+  import commentNew from '../comments/comment_new.vue';
   import { Comment } from '../comments/comment_service.js';
 
   function _selectPost () {
@@ -23,6 +25,15 @@
     vm.comments = Comment.where({ commentable_id: vm.post.id, commentable_type: 'post' });
   }
 
+  function _buildComment () {
+    const vm = this;
+    vm.newComment = Comment.new(vm.post.id, 'post');
+  }
+
+  function _createComment (params) {
+    Comment.create(params);
+  }
+
   export default {
     name: 'post-item',
     props: {
@@ -31,16 +42,25 @@
     },
     data: function () {
       return {
-        comments: undefined
+        comments: undefined,
+        newComment: undefined
       };
     },
-    mounted: _getComments,
+    mounted: function () {
+      const vm = this;
+      // Use instance methods here, not private methods.
+      vm.getComments();
+      vm.buildComment();
+    },
     components: {
-      'comment-list': commentList
+      'comment-list': commentList,
+      'comment-new': commentNew
     },
     methods: {
       selectPost: _selectPost,
-      getComments: _getComments
+      getComments: _getComments,
+      buildComment: _buildComment,
+      createComment: _createComment
     }
   };
 </script>
