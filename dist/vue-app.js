@@ -40653,6 +40653,19 @@ exports.reload = tryWrap(function (id, options) {
 },{}],7:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.idDesc = idDesc;
+var _ = require('lodash');
+
+function idDesc(iter) {
+  return _.chain(iter).orderBy('id', 'desc').value();
+}
+
+},{"lodash":3}],8:[function(require,module,exports){
+'use strict';
+
 var _resources = require('./resources.js');
 
 var resources = _interopRequireWildcard(_resources);
@@ -40677,7 +40690,7 @@ var Main = function (Post, Comment, postList) {
   }
 
   function _initResources(vm) {
-    Promise.all([Post.all(), Comment.all()]).then(_storeResources(vm));
+    return Promise.all([Post.all(), Comment.all()]).then(_storeResources(vm));
   }
 
   main.init = function () {
@@ -40701,7 +40714,7 @@ var Main = function (Post, Comment, postList) {
 
 Main.init();
 
-},{"./posts/post_list.vue":10,"./resources.js":11,"vue/dist/vue.js":5}],8:[function(require,module,exports){
+},{"./posts/post_list.vue":11,"./resources.js":12,"vue/dist/vue.js":5}],9:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40732,13 +40745,13 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
-},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],9:[function(require,module,exports){
+},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40762,13 +40775,13 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
-},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],10:[function(require,module,exports){
+},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],11:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40785,6 +40798,10 @@ var _post_item = require('./post_item.vue');
 var postItem = _interopRequireWildcard(_post_item);
 
 var _resources = require('../resources.js');
+
+var _filters = require('../filters.js');
+
+var filters = _interopRequireWildcard(_filters);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -40817,14 +40834,15 @@ exports.default = {
     'post-create': postCreate
   },
   methods: {
-    createPost: _create
+    createPost: _create,
+    idDesc: filters.idDesc
   }
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',[_h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-12"},[_h('post-create',{staticClass:"row",attrs:{"new-post":newPost,"on-create":createPost}})])])," ",_h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-12"},[_l((posts),function(post){return _h('post-item',{staticClass:"row",attrs:{"post":post}})})])])])}}
+__vue__options__.render = function(){with(this){return _h('div',[_h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-12"},[_h('post-create',{staticClass:"row",attrs:{"new-post":newPost,"on-create":createPost}})])])," ",_h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-12"},[_l((idDesc(posts)),function(post){return _h('post-item',{staticClass:"row",attrs:{"post":post}})})])])])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -40837,7 +40855,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"../resources.js":11,"./post_create.vue":8,"./post_item.vue":9,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],11:[function(require,module,exports){
+},{"../filters.js":7,"../resources.js":12,"./post_create.vue":9,"./post_item.vue":10,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40947,7 +40965,7 @@ var Comment = exports.Comment = function ($, _) {
   return srv;
 }($, _);
 
-},{"jquery":2,"lodash":3}]},{},[7])
+},{"jquery":2,"lodash":3}]},{},[8])
 
 
 //# sourceMappingURL=vue-app.js.map

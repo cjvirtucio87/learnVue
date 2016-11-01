@@ -15,7 +15,7 @@ const Main = (function (Post, Comment, postList) {
   }
 
   function _initResources (vm) {
-    Promise.all([Post.all(), Comment.all()])
+    return Promise.all([Post.all(), Comment.all()])
       .then(_storeResources(vm));
   }
 

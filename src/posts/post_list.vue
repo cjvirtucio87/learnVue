@@ -7,7 +7,7 @@
     </div>
     <div class='row'>
       <div class='col-md-12'>
-        <post-item class='row' v-for='post of posts' :post='post'></post-item>
+        <post-item class='row' v-for='post of idDesc(posts)' :post='post'></post-item>
       </div>
     </div>
   </div>
@@ -17,6 +17,7 @@
   import * as postCreate from './post_create.vue';
   import * as postItem from './post_item.vue';
   import { Post } from '../resources.js';
+  import * as filters from '../filters.js';
 
   function _create (params) {
     Post.create(params);
@@ -46,7 +47,8 @@
       'post-create': postCreate
     },
     methods: {
-      createPost: _create
+      createPost: _create,
+      idDesc: filters.idDesc
     }
   };
 </script>
