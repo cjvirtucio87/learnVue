@@ -65,9 +65,9 @@ export const Comment = (function ($, _) {
   };
 
   srv.where = function (params) {
-    return _.chain(Comment.all().cached)
-                      .filter(params)
-                      .value();
+    return _.chain(_data.cached)
+            .filter(params)
+            .value();
   };
 
   return srv;

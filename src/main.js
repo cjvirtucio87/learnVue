@@ -7,31 +7,31 @@ const $ = require('jquery');
 
 // Bootstrapping the application
 const Main = (function ($, Post, Comment, components) {
-  let _posts, _comments, main;
-  main = {};
+  let main = {};
 
-  function _cacheResponses (responses) {
-    _posts = responses[0];
-    _comments = responses[1];
-  }
-
-  function _instantiate () {
-    return new Vue({
-      el: '#vue-app',
-      data: {
-        posts: _posts.cached,
-        comments: _comments.cached,
-      },
-      components: {
-        'post-list': components.postList
-      }
-    });
+  function _cacheResponses (vm) {
+    return function (responses) {
+      vm.posts = responses[0].cached;
+      vm.comments = responses[1].cached;
+    };
   }
 
   main.init = function () {
-    Promise.all([Post.all(), Comment.all()])
-      .then(_cacheResponses)
-      .then(_instantiate);
+    return new Vue({
+      el: '#vue-app',
+      data: {
+        posts: undefined,
+        comments: undefined,
+      },
+      components: {
+        'post-list': components.postList
+      },
+      created: function () {
+        let vm = this;
+        Promise.all([Post.all(), Comment.all()])
+          .then(_cacheResponses(vm));
+      }
+    });
   };
 
   return main;

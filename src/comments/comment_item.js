@@ -1,5 +1,4 @@
 'use strict';
-const _ = require('lodash');
 import { Comment } from '../resources.js';
 
 export const commentItem = {
@@ -10,10 +9,12 @@ export const commentItem = {
       commentable_type: 'comment',
       commentable_id: vm.comment.id
     };
-    let _comments = Comment.where(_params);
+    let _replies = Comment.where(_params);
     return {
-      comments: _comments
+      replies: _replies
     };
+  },
+  components: {
   },
   template:
   `
@@ -22,6 +23,8 @@ export const commentItem = {
       <h5>{{comment.author}}</h5>
       <p>{{comment.body}}</p>
     </div>
+
+    <comment-list v-if='replies.length' :comments='replies'></comment-list>
   </div>
   `
 };

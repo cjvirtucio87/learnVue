@@ -34734,7 +34734,6 @@ exports.commentItem = undefined;
 
 var _resources = require('../resources.js');
 
-var _ = require('lodash');
 var commentItem = exports.commentItem = {
   props: ['comment'],
   data: function data() {
@@ -34743,15 +34742,16 @@ var commentItem = exports.commentItem = {
       commentable_type: 'comment',
       commentable_id: vm.comment.id
     };
-    var _comments = _resources.Comment.where(_params);
+    var _replies = _resources.Comment.where(_params);
     return {
-      comments: _comments
+      replies: _replies
     };
   },
-  template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h5>{{comment.author}}</h5>\n      <p>{{comment.body}}</p>\n    </div>\n  </div>\n  '
+  components: {},
+  template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h5>{{comment.author}}</h5>\n      <p>{{comment.body}}</p>\n    </div>\n\n    <comment-list v-if=\'replies.length\' :comments=\'replies\'></comment-list>\n  </div>\n  '
 };
 
-},{"../resources.js":12,"lodash":2}],5:[function(require,module,exports){
+},{"../resources.js":12}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34824,31 +34824,30 @@ var $ = require('jquery');
 
 // Bootstrapping the application
 var Main = function ($, Post, Comment, components) {
-  var _posts = void 0,
-      _comments = void 0,
-      main = void 0;
-  main = {};
+  var main = {};
 
-  function _cacheResponses(responses) {
-    _posts = responses[0];
-    _comments = responses[1];
-  }
-
-  function _instantiate() {
-    return new Vue({
-      el: '#vue-app',
-      data: {
-        posts: _posts.cached,
-        comments: _comments.cached
-      },
-      components: {
-        'post-list': components.postList
-      }
-    });
+  function _cacheResponses(vm) {
+    return function (responses) {
+      vm.posts = responses[0].cached;
+      vm.comments = responses[1].cached;
+    };
   }
 
   main.init = function () {
-    Promise.all([Post.all(), Comment.all()]).then(_cacheResponses).then(_instantiate);
+    return new Vue({
+      el: '#vue-app',
+      data: {
+        posts: undefined,
+        comments: undefined
+      },
+      components: {
+        'post-list': components.postList
+      },
+      created: function created() {
+        var vm = this;
+        Promise.all([Post.all(), Comment.all()]).then(_cacheResponses(vm));
+      }
+    });
   };
 
   return main;
@@ -35057,7 +35056,7 @@ var Comment = exports.Comment = function ($, _) {
   };
 
   srv.where = function (params) {
-    return _.chain(Comment.all().cached).filter(params).value();
+    return _.chain(_data.cached).filter(params).value();
   };
 
   return srv;
