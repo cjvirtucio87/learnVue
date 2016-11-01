@@ -40669,11 +40669,15 @@ var Vue = require('vue/dist/vue.js');
 var Main = function (Post, Comment, postList) {
   var main = {};
 
-  function _cacheResponses(vm) {
+  function _storeResources(vm) {
     return function (responses) {
       vm.posts = responses[0].cached;
       vm.comments = responses[1].cached;
     };
+  }
+
+  function _initResources(vm) {
+    Promise.all([Post.all(), Comment.all()]).then(_storeResources(vm));
   }
 
   main.init = function () {
@@ -40687,7 +40691,7 @@ var Main = function (Post, Comment, postList) {
       },
       created: function created() {
         var vm = this;
-        Promise.all([Post.all(), Comment.all()]).then(_cacheResponses(vm));
+        _initResources(vm);
       }
     });
   };
@@ -40697,7 +40701,44 @@ var Main = function (Post, Comment, postList) {
 
 Main.init();
 
-},{"./posts/post_list.vue":9,"./resources.js":10,"vue/dist/vue.js":5}],8:[function(require,module,exports){
+},{"./posts/post_list.vue":10,"./resources.js":11,"vue/dist/vue.js":5}],8:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  name: 'post-create',
+  props: {
+    newPost: Object,
+    onCreate: Function
+  },
+  methods: {
+    createPost: function createPost() {
+      var vm = this;
+      vm.onCreate(vm.newPost);
+    }
+  }
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function(){with(this){return _h('div',{staticClass:"col-md-12"},[_h('div',{staticClass:"card"},[_m(0)," ",_h('div',{staticClass:"card-block"},[_h('form',[_m(1),_m(2)," ",_h('input',{directives:[{name:"model",rawName:"v-model",value:(newPost.title),expression:"newPost.title"}],attrs:{"id":"new-post-title","type":"text"},domProps:{"value":_s(newPost.title)},on:{"input":function($event){if($event.target.composing)return;newPost.title=$event.target.value}}}),_m(3)," ",_m(4),_m(5)," ",_h('textarea',{directives:[{name:"model",rawName:"v-model",value:(newPost.body),expression:"newPost.body"}],attrs:{"id":"new-post-body"},domProps:{"value":_s(newPost.body)},on:{"input":function($event){if($event.target.composing)return;newPost.body=$event.target.value}}})," ",_h('input',{attrs:{"type":"submit"},on:{"click":function($event){$event.preventDefault();createPost()}}})])])])])}}
+__vue__options__.staticRenderFns = [function(){with(this){return _h('div',{staticClass:"card-header"},[_h('h1',["New Post"])])}},function(){with(this){return _h('label',{attrs:{"for":"new-post-title"}},["Title"])}},function(){with(this){return _h('br')}},function(){with(this){return _h('br')}},function(){with(this){return _h('label',{attrs:{"for":"new-post-body"}},["Body"])}},function(){with(this){return _h('br')}}]
+if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3", __vue__options__)
+  } else {
+    hotAPI.rerender("data-v-3", __vue__options__)
+  }
+})()}
+
+},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],9:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40727,7 +40768,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],9:[function(require,module,exports){
+},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40735,26 +40776,55 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _post_create = require('./post_create.vue');
+
+var postCreate = _interopRequireWildcard(_post_create);
+
 var _post_item = require('./post_item.vue');
 
 var postItem = _interopRequireWildcard(_post_item);
 
+var _resources = require('../resources.js');
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _create(params) {
+  _resources.Post.create(params);
+}
+
+function _initNewPost() {
+  return _resources.Post.new().then(function (formData) {
+    return formData;
+  });
+}
+
+function _initData() {
+  return {
+    newPost: _initNewPost()
+  };
+}
 
 exports.default = {
   name: 'post-list',
   props: {
     posts: Array
   },
+  data: function data() {
+    return _initData();
+  },
   components: {
-    'post-item': postItem
+    'post-item': postItem,
+    'post-create': postCreate
+  },
+  methods: {
+    createPost: _create
   }
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-12"},[_l((posts),function(post){return _h('post-item',{staticClass:"row",attrs:{"post":post}})})])])}}
+__vue__options__.render = function(){with(this){return _h('div',[_h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-12"},[_h('post-create',{staticClass:"row",attrs:{"new-post":newPost,"on-create":createPost}})])])," ",_h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-12"},[_l((posts),function(post){return _h('post-item',{staticClass:"row",attrs:{"post":post}})})])])])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -40763,11 +40833,11 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-1", __vue__options__)
   } else {
-    hotAPI.reload("data-v-1", __vue__options__)
+    hotAPI.rerender("data-v-1", __vue__options__)
   }
 })()}
 
-},{"./post_item.vue":8,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],10:[function(require,module,exports){
+},{"../resources.js":11,"./post_create.vue":8,"./post_item.vue":9,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40779,7 +40849,10 @@ var $ = require('jquery');
 // HTTP
 var Post = exports.Post = function ($, _) {
   var srv = {};
-  var _data = {};
+  var _data = {
+    cached: [],
+    created: undefined
+  };
   var url = './mock/posts.json';
 
   function _cacheAll(response) {
@@ -40787,8 +40860,28 @@ var Post = exports.Post = function ($, _) {
     return _data;
   }
 
+  function _cacheAdd(params) {
+    _data.cached.push(params);
+    _data.created = params;
+    return _data;
+  }
+
+  function _initNewPost(data) {
+    var newId = _.chain(data.cached).map('id').max().value() + 1;
+    return {
+      id: newId,
+      author: undefined,
+      title: undefined,
+      body: undefined
+    };
+  }
+
   function _queryAll() {
     return $.get(url).then(_cacheAll).catch(_logError);
+  }
+
+  function _queryCreate(params) {
+    return $.post(url, params).then(_cacheAdd).catch(_logError);
   }
 
   function _logError(reason) {
@@ -40802,6 +40895,18 @@ var Post = exports.Post = function ($, _) {
     } else {
       return Promise.resolve(_data);
     }
+  };
+
+  srv.create = function (params, options) {
+    if (options && options.force) {
+      return _queryCreate(params);
+    } else {
+      return Promise.resolve(_cacheAdd(params));
+    }
+  };
+
+  srv.new = function () {
+    return srv.all().then(_initNewPost);
   };
 
   return srv;

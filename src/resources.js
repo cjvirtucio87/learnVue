@@ -5,7 +5,10 @@ const $ = require('jquery');
 // HTTP
 export const Post = (function ($, _) {
   const srv = {};
-  const _data = {};
+  const _data = {
+    cached: [],
+    created: undefined
+  };
   const url = './mock/posts.json';
 
   function _cacheAll (response) {
@@ -13,9 +16,34 @@ export const Post = (function ($, _) {
     return _data;
   }
 
+  function _cacheAdd (params) {
+    _data.cached.push(params);
+    _data.created = params;
+    return _data;
+  }
+
+  function _initNewPost (data) {
+    const newId = _.chain(data.cached)
+                   .map('id')
+                   .max()
+                   .value() + 1;
+    return {
+      id: newId,
+      author: undefined,
+      title: undefined,
+      body: undefined
+    };
+  }
+
   function _queryAll () {
     return $.get(url)
       .then(_cacheAll)
+      .catch(_logError);
+  }
+
+  function _queryCreate (params) {
+    return $.post(url, params)
+      .then(_cacheAdd)
       .catch(_logError);
   }
 
@@ -30,6 +58,18 @@ export const Post = (function ($, _) {
     } else {
       return Promise.resolve(_data);
     }
+  };
+
+  srv.create = function (params, options) {
+    if ((options && options.force)) {
+      return _queryCreate(params);
+    } else {
+      return Promise.resolve(_cacheAdd(params));
+    }
+  };
+
+  srv.new = function () {
+    return srv.all().then(_initNewPost);
   };
 
   return srv;

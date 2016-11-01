@@ -7,11 +7,16 @@ const Vue = require('vue/dist/vue.js');
 const Main = (function (Post, Comment, postList) {
   const main = {};
 
-  function _cacheResponses (vm) {
+  function _storeResources (vm) {
     return function (responses) {
       vm.posts = responses[0].cached;
       vm.comments = responses[1].cached;
     };
+  }
+
+  function _initResources (vm) {
+    Promise.all([Post.all(), Comment.all()])
+      .then(_storeResources(vm));
   }
 
   main.init = function () {
@@ -25,8 +30,7 @@ const Main = (function (Post, Comment, postList) {
       },
       created: function () {
         const vm = this;
-        Promise.all([Post.all(), Comment.all()])
-          .then(_cacheResponses(vm));
+        _initResources(vm);
       }
     });
   };
