@@ -35,14 +35,6 @@
     vm.clearSelect();
   }
 
-  // Async issue. Needs fixing.
-  function _initNewPost (data) {
-    return Post.new().then(function (formData) {
-      data.newPost = formData;
-      return data;
-    });
-  }
-
   function _checkSelected (id) {
     const vm = this;
     return vm.selected && vm.selected === id;
@@ -59,9 +51,11 @@
   }
 
   function _initData () {
-    const _data = {};
-    _data.selected = undefined;
-    return _initNewPost(_data);
+    const data = {};
+    data.selected = undefined;
+    data.newPost = Post.new();
+    console.log(data.newPost);
+    return data;
   }
 
   export default {

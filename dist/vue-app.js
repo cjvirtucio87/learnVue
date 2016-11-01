@@ -46348,7 +46348,7 @@ var Main = function (Post, Comment, postList) {
   }
 
   function _initResources(vm) {
-    return Promise.all([Post.all(), Comment.all()]).then(_storeResources(vm));
+    return Promise.all([Post.init(), Comment.all()]).then(_storeResources(vm));
   }
 
   main.init = function () {
@@ -46410,9 +46410,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
@@ -46451,9 +46451,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
@@ -46497,13 +46497,6 @@ function _update(params) {
   vm.clearSelect();
 }
 
-function _initNewPost(data) {
-  return _post_service.Post.new().then(function (formData) {
-    data.newPost = formData;
-    return data;
-  });
-}
-
 function _checkSelected(id) {
   var vm = this;
   return vm.selected && vm.selected === id;
@@ -46520,9 +46513,11 @@ function _select(id) {
 }
 
 function _initData() {
-  var _data = {};
-  _data.selected = undefined;
-  return _initNewPost(_data);
+  var data = {};
+  data.selected = undefined;
+  data.newPost = _post_service.Post.new();
+  console.log(data.newPost);
+  return data;
 }
 
 exports.default = {
@@ -46600,9 +46595,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
@@ -46620,7 +46615,8 @@ var Post = exports.Post = function ($, _) {
   var srv = {};
   var _data = {
     cached: [],
-    created: undefined
+    created: undefined,
+    newPost: undefined
   };
   var url = './mock/posts.json';
 
@@ -46635,14 +46631,20 @@ var Post = exports.Post = function ($, _) {
     return _data.created;
   }
 
-  function _initNewPost(data) {
-    var newId = _.chain(data.cached).map('id').max().value() + 1;
-    return {
+  function _initNewID() {
+    return _.chain(_data.cached).map('id').max().value() + 1;
+  }
+
+  function _initNewPost() {
+    var newId = _initNewID();
+    var newPost = {
       id: newId,
       author: undefined,
       title: undefined,
       body: undefined
     };
+    _data.newPost = _.cloneDeep(newPost);
+    return _data;
   }
 
   function _queryAll() {
@@ -46680,7 +46682,7 @@ var Post = exports.Post = function ($, _) {
   };
 
   srv.new = function () {
-    return srv.all().then(_initNewPost);
+    return _data.newPost;
   };
 
   srv.update = function (params) {
@@ -46691,8 +46693,7 @@ var Post = exports.Post = function ($, _) {
 
   srv.init = function () {
     return srv.all().then(function (data) {
-      _initNewPost();
-      return data;
+      _initNewPost();return data;
     });
   };
 
