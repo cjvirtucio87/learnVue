@@ -34730,6 +34730,47 @@ return Vue$3;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var commentItem = exports.commentItem = {
+  props: ['comment'],
+  template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h5>{{comment.author}}</h5>\n      <p>{{comment.body}}</p>\n    </div>\n  </div>\n  '
+};
+
+},{}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.commentList = undefined;
+
+var _comment_item = require('./comment_item.js');
+
+var commentList = exports.commentList = {
+  props: ['comments'],
+  data: function data() {
+    return {
+      newPost: {
+        id: undefined,
+        author: undefined,
+        title: undefined,
+        body: undefined,
+        commentable_id: undefined,
+        commentable_type: undefined
+      }
+    };
+  },
+  components: {
+    'comment-item': _comment_item.commentItem
+  },
+  template: '\n  <div>\n    <div class=\'row\'>\n      <div class=\'col-md-10 offset-md-1 col-xs-12\'>\n      </div>\n    </div>\n    <div class=\'row\'>\n      <div class=\'col-md-10 offset-md-1 col-xs-12\'>\n        <template>\n          <div v-for=\'comment in comments\'>\n            <comment-item :comment=\'comment\'></comment-item>\n          </div>\n        </template>\n      </div>\n    </div>\n  </div>\n  '
+};
+
+},{"./comment_item.js":4}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _post_list = require('./posts/post_list.js');
 
@@ -34740,7 +34781,16 @@ Object.defineProperty(exports, 'postList', {
   }
 });
 
-},{"./posts/post_list.js":7}],5:[function(require,module,exports){
+var _comment_list = require('./comments/comment_list.js');
+
+Object.defineProperty(exports, 'commentList', {
+  enumerable: true,
+  get: function get() {
+    return _comment_list.commentList;
+  }
+});
+
+},{"./comments/comment_list.js":5,"./posts/post_list.js":9}],7:[function(require,module,exports){
 'use strict';
 
 var _resources = require('./resources.js');
@@ -34790,14 +34840,28 @@ var Main = function ($, Post, Comment, components) {
 
 Main.init();
 
-},{"./components.js":4,"./resources.js":10,"jquery":1,"vue/dist/vue.js":3}],6:[function(require,module,exports){
+},{"./components.js":6,"./resources.js":12,"jquery":1,"vue/dist/vue.js":3}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.postItem = undefined;
+
+var _resources = require('../resources.js');
+
+var _comment_list = require('../comments/comment_list.js');
+
+// import { commentList } from '../components.js';
+
 var postItem = exports.postItem = {
   props: ['post'],
+  data: function data() {
+    var _comments = _resources.Comment.all();
+    return {
+      comments: _comments.cached
+    };
+  },
   methods: {
     onSelect: function onSelect() {
       // Don't call onSelect because you're waiting for the click event.
@@ -34805,10 +34869,13 @@ var postItem = exports.postItem = {
       vm.$emit('post-selected', vm.post.id);
     }
   },
-  template: '\n  <div class=\'card\'>\n    <a @click=\'onSelect\'>\n      <img class=\'img-fluid\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\'>\n    </a>\n\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n    </div>\n  </div>\n  '
+  components: {
+    'comment-list': _comment_list.commentList
+  },
+  template: '\n  <div class=\'card\'>\n    <a @click=\'onSelect\'>\n      <img class=\'img-fluid\' src=\'http://www.medicalnewstoday.com/content/images/articles/311/311569/coffee.jpg\'>\n    </a>\n\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n    </div>\n\n    <comment-list :comments=\'comments\'></comment-list>\n  </div>\n  '
 };
 
-},{}],7:[function(require,module,exports){
+},{"../comments/comment_list.js":5,"../resources.js":12}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34866,6 +34933,7 @@ var postList = exports.postList = {
       var newPost = _.cloneDeep(formData);
       newPost.id = _.chain(vm.posts).map('id').max().add(1).value();
       vm.posts.unshift(newPost);
+      // Reset.
       Object.keys(vm.newPost).forEach(function (key) {
         vm.newPost[key] = undefined;
       });
@@ -34874,7 +34942,7 @@ var postList = exports.postList = {
   template: '\n  <div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <post-new :new-post=\'newPost\' @post-create=\'addPost\'></post-new>\n      </div>\n    </div>\n    <div class=\'row\'>\n      <div class=\'col-md-6 offset-md-3 col-xs-12\'>\n        <transition-group name=\'posts\'>\n          <template>\n            <div v-for=\'post in unselected(posts)\' :key=\'post\'>\n              <post-item :post=\'post\' v-if=\'!selected\' @post-selected=\'setSelected\'></post-item>\n              <post-show :post=\'post\' v-if=\'matchSelected(post.id)\'></post-show>\n            </div>\n          </template>\n        </transition-group>\n      </div>\n    </div>\n  </div>\n  '
 };
 
-},{"./post_item.js":6,"./post_new.js":8,"./post_show.js":9,"lodash":2}],8:[function(require,module,exports){
+},{"./post_item.js":8,"./post_new.js":10,"./post_show.js":11,"lodash":2}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34891,7 +34959,7 @@ var postNew = exports.postNew = {
   template: '\n  <div class=\'card\'>\n    <div class=\'card-header\'>\n      <h3 class=\'card-title\'>New Post</h4>\n    </div>\n    <div class=\'card-block\'>\n      <form>\n        <div class=\'md-form\'>\n          <label for=\'new-title\'>Title</label>\n          <input id=\'new-title\' type=\'text\' v-model=\'newPost.title\'><br>\n        </div>\n\n        <div class=\'md-form\'>\n          <label for=\'new-body\'>Body</label>\n          <textarea id=\'new-body\' class=\'md-textarea\' v-model=\'newPost.body\' rows=\'5\'></textarea><br>\n        </div>\n\n        <div class=\'md-form\'>\n          <input type=\'submit\' class=\'btn btn-success float-xs-right\' @click.prevent=\'onCreate()\' value=\'submit\'></input>\n        </div>\n      </form>\n    </div>\n  </div>\n  '
 };
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34902,7 +34970,7 @@ var postShow = exports.postShow = {
   template: '\n  <div class=\'card\'>\n    <div class=\'card-header\'>\n    </div>\n    <div class=\'card-block\'>\n      <h4 class=\'card-title\'>{{post.title}}</h4>\n      <p class=\'card-text\'>{{post.body}}</p>\n    </div>\n  </div>\n  '
 };
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34935,7 +35003,7 @@ var Post = exports.Post = function ($, _) {
     if (options && options.force || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      return Promise.resolve(_data);
+      return _data;
     }
   };
 
@@ -34965,14 +35033,14 @@ var Comment = exports.Comment = function ($, _) {
     if (options && options.force || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      return Promise.resolve(_data);
+      return _data;
     }
   };
 
   return srv;
 }($, _);
 
-},{"jquery":1,"lodash":2}]},{},[5])
+},{"jquery":1,"lodash":2}]},{},[7])
 
 
 //# sourceMappingURL=vue-app.js.map

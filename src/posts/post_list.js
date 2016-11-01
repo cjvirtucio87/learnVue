@@ -51,6 +51,7 @@ export const postList = {
                     .add(1)
                     .value();
       vm.posts.unshift(newPost);
+      // Reset.
       Object.keys(vm.newPost).forEach(key => { vm.newPost[key] = undefined; });
     }
   },

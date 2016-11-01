@@ -28,7 +28,7 @@ export const Post = (function ($, _) {
     if ((options && options.force) || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      return Promise.resolve(_data);
+      return _data;
     }
   };
 
@@ -60,7 +60,7 @@ export const Comment = (function ($, _) {
     if ((options && options.force) || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      return Promise.resolve(_data);
+      return _data;
     }
   };
 
