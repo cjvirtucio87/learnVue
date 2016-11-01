@@ -2,25 +2,29 @@
   <div>
     <div class='row'>
       <div class='col-md-12'>
-        <post-create class='row' :new-post='newPost' :on-create='createPost'></post-create>
+        <post-new class='row' :new-post='newPost' :on-create='createPost'></post-new>
       </div>
     </div>
     <div class='row'>
       <div class='col-md-12'>
-        <post-item class='row' v-for='post of idDesc(posts)' :post='post'></post-item>
+        <post-item class='row' v-for='post of idDesc(posts)' :post='post' :on-update='updatePost'></post-item>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import * as postCreate from './post_create.vue';
+  import * as postNew from './post_new.vue';
   import * as postItem from './post_item.vue';
   import { Post } from '../resources.js';
   import * as filters from '../filters.js';
 
   function _create (params) {
     Post.create(params);
+  }
+
+  function _update (params) {
+    Post.update(params);
   }
 
   function _initNewPost () {
@@ -44,10 +48,11 @@
     },
     components: {
       'post-item': postItem,
-      'post-create': postCreate
+      'post-new': postNew
     },
     methods: {
       createPost: _create,
+      updatePost: _update,
       idDesc: filters.idDesc
     }
   };

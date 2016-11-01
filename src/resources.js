@@ -111,5 +111,12 @@ export const Comment = (function ($, _) {
             .value();
   };
 
+  srv.update = function (params) {
+    const post = srv.where({ id: params.id });
+    _.cloneDeep(params, post);
+    console.log(post);
+    return post;
+  };
+
   return srv;
 })($, _);

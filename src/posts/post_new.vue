@@ -18,8 +18,10 @@
 </template>
 
 <script>
+  const _ = require('lodash');
+
   export default {
-    name: 'post-create',
+    name: 'post-new',
     props: {
       newPost: Object,
       onCreate: Function
@@ -27,7 +29,8 @@
     methods: {
       createPost: function () {
         const vm = this;
-        vm.onCreate(vm.newPost);
+        const newPost = _.cloneDeep(vm.newPost);
+        vm.onCreate(newPost);
       }
     }
   };

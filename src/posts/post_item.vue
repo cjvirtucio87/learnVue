@@ -12,7 +12,8 @@
   export default {
     name: 'post-item',
     props: {
-      post: Object
+      post: Object,
+      onUpdate: Function
     }
   };
 </script>
