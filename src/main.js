@@ -1,13 +1,11 @@
 'use strict';
 import * as resources from './resources.js';
-import * as components from './components.js';
-
+import * as postList from './posts/post_list.vue';
 const Vue = require('vue/dist/vue.js');
-const $ = require('jquery');
 
 // Bootstrapping the application
-const Main = (function ($, Post, Comment, components) {
-  let main = {};
+const Main = (function (Post, Comment, postList) {
+  const main = {};
 
   function _cacheResponses (vm) {
     return function (responses) {
@@ -20,14 +18,13 @@ const Main = (function ($, Post, Comment, components) {
     return new Vue({
       el: '#vue-app',
       data: {
-        posts: undefined,
-        comments: undefined,
+        posts: undefined
       },
       components: {
-        'post-list': components.postList
+        'post-list': postList
       },
       created: function () {
-        let vm = this;
+        const vm = this;
         Promise.all([Post.all(), Comment.all()])
           .then(_cacheResponses(vm));
       }
@@ -35,6 +32,6 @@ const Main = (function ($, Post, Comment, components) {
   };
 
   return main;
-})($, resources.Post, resources.Comment, components);
+})(resources.Post, resources.Comment, postList);
 
 Main.init();

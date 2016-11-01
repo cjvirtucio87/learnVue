@@ -5,6 +5,7 @@
 const browserify = require('browserify');
 const watchify = require('watchify');
 const babelify = require('babelify');
+const vueify = require('vueify');
 
 // gulp
 const gulp = require('gulp');
@@ -14,11 +15,13 @@ const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 
 function compile (watch) {
-  const stream = watchify(browserify('./src/main.js', { debug: true }).transform(babelify));
+  const stream = watchify(browserify('./src/main.js', { debug: true })
+                      .transform(vueify)
+                      .transform(babelify));
 
   function _bundle () {
     stream.bundle()
-      .on('error', function(err) { console.error(err); this.emit('end'); })
+      .on('error', function (err) { console.error(err); this.emit('end'); })
       .pipe(source('./src/main.js'))
       .pipe(buffer())
       .pipe(rename('vue-app.js'))
@@ -40,34 +43,6 @@ function compile (watch) {
 function watch () {
   return compile(true);
 }
-
-// const Bundler = (function () {
-//   const stream = watchify(browserify('./src/main.js', { debug: true }).transform(babelify));
-//
-//   function _bundle () {
-//     stream.bundle()
-//       .on('error', function(err) { console.error(err); this.emit('end'); })
-//       .pipe(source('./src/main.js'))
-//       .pipe(buffer())
-//       .pipe(rename('vue-app.js'))
-//       .pipe(sourcemaps.init({ loadMaps: true }))
-//       .pipe(sourcemaps.write('./'))
-//       .pipe(gulp.dest('./dist/'));
-//   }
-//
-//   stream.run = function () {
-//     _bundle();
-//   };
-//
-//   stream.watch = function () {
-//     stream.on('update', function () {
-//       console.log('bundling..');
-//       _bundle();
-//     });
-//   };
-//
-//   return stream;
-// })(fs, browserify, watchify, babelify, gulp);
 
 gulp.task('build', function () { return compile(); });
 gulp.task('watch', function () { return watch(); });

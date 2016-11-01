@@ -4,8 +4,8 @@ const $ = require('jquery');
 
 // HTTP
 export const Post = (function ($, _) {
-  let srv = {};
-  let _data = {};
+  const srv = {};
+  const _data = {};
   const url = './mock/posts.json';
 
   function _cacheAll (response) {
@@ -21,14 +21,14 @@ export const Post = (function ($, _) {
 
   function _logError (reason) {
     console.error(reason);
-    throw new Error ('ERROR: ' + reason);
+    throw new Error('ERROR: ' + reason);
   }
 
   srv.all = function (options) {
     if ((options && options.force) || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      return _data;
+      return Promise.resolve(_data);
     }
   };
 
@@ -36,13 +36,13 @@ export const Post = (function ($, _) {
 })($, _);
 
 export const Comment = (function ($, _) {
-  let srv = {};
-  let _data = {};
+  const srv = {};
+  const _data = {};
   const url = './mock/comments.json';
 
   function _logError (reason) {
     console.error(reason);
-    throw new Error ('ERROR: ' + reason);
+    throw new Error('ERROR: ' + reason);
   }
 
   function _cacheAll (response) {
@@ -60,11 +60,12 @@ export const Comment = (function ($, _) {
     if ((options && options.force) || _.isEmpty(_data.cached)) {
       return _queryAll();
     } else {
-      return _data;
+      return Promise.resolve(_data);
     }
   };
 
   srv.where = function (params) {
+    if (_.isEmpty(_data.cached)) return undefined;
     return _.chain(_data.cached)
             .filter(params)
             .value();
