@@ -1,6 +1,7 @@
 'use strict';
 const _ = require('lodash');
 const $ = require('jquery');
+const Promise = require('bluebird');
 
 export const Post = (function ($, _) {
   const srv = {};
@@ -18,7 +19,7 @@ export const Post = (function ($, _) {
   function _cacheAdd (params) {
     _data.cached.push(params);
     _data.created = params;
-    return _data;
+    return _data.created;
   }
 
   function _initNewPost (data) {
@@ -82,6 +83,13 @@ export const Post = (function ($, _) {
     const post = srv.where({ id: params.id });
     _.cloneDeep(params, post);
     return post;
+  };
+
+  srv.init = function () {
+    return srv.all().then((data) => {
+      _initNewPost();
+      return data;
+    });
   };
 
   return srv;

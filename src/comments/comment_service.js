@@ -44,5 +44,11 @@ export const Comment = (function ($, _) {
     return comment;
   };
 
+  srv.init = function () {
+    return srv.all().then((data) => {
+      return data;
+    });
+  };
+
   return srv;
 })($, _);

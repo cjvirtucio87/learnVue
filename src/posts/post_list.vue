@@ -15,6 +15,8 @@
 </template>
 
 <script>
+  const Vue = require('vue');
+
   // Post components
   import * as postItem from './post_item.vue';
   import * as postNew from './post_new.vue';
@@ -33,9 +35,12 @@
     vm.clearSelect();
   }
 
-  function _initNewPost () {
-    return Post.new()
-      .then(function (formData) { return formData; });
+  // Async issue. Needs fixing.
+  function _initNewPost (data) {
+    return Post.new().then(function (formData) {
+      data.newPost = formData;
+      return data;
+    });
   }
 
   function _checkSelected (id) {
@@ -54,10 +59,9 @@
   }
 
   function _initData () {
-    return {
-      newPost: _initNewPost(),
-      selected: undefined
-    };
+    const _data = {};
+    _data.selected = undefined;
+    return _initNewPost(_data);
   }
 
   export default {
