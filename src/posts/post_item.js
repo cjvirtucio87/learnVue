@@ -1,15 +1,18 @@
 'use strict';
-import { Comment } from '../resources.js';
 import { commentList } from '../comments/comment_list.js';
-
-// import { commentList } from '../components.js';
+import { Comment } from '../resources.js';
 
 export const postItem = {
   props: ['post'],
   data: function () {
-    let _comments = Comment.all();
+    let vm = this;
+    let _params = {
+      commentable_type: 'post',
+      commentable_id: vm.post.id
+    };
+    let _comments = Comment.where(_params);
     return {
-      comments: _comments.cached
+      comments: _comments
     };
   },
   methods: {

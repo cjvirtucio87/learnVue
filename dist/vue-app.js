@@ -34730,12 +34730,28 @@ return Vue$3;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.commentItem = undefined;
+
+var _resources = require('../resources.js');
+
+var _ = require('lodash');
 var commentItem = exports.commentItem = {
   props: ['comment'],
+  data: function data() {
+    var vm = this;
+    var _params = {
+      commentable_type: 'comment',
+      commentable_id: vm.comment.id
+    };
+    var _comments = _resources.Comment.where(_params);
+    return {
+      comments: _comments
+    };
+  },
   template: '\n  <div class=\'card\'>\n    <div class=\'card-block\'>\n      <h5>{{comment.author}}</h5>\n      <p>{{comment.body}}</p>\n    </div>\n  </div>\n  '
 };
 
-},{}],5:[function(require,module,exports){
+},{"../resources.js":12,"lodash":2}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34848,18 +34864,21 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.postItem = undefined;
 
-var _resources = require('../resources.js');
-
 var _comment_list = require('../comments/comment_list.js');
 
-// import { commentList } from '../components.js';
+var _resources = require('../resources.js');
 
 var postItem = exports.postItem = {
   props: ['post'],
   data: function data() {
-    var _comments = _resources.Comment.all();
+    var vm = this;
+    var _params = {
+      commentable_type: 'post',
+      commentable_id: vm.post.id
+    };
+    var _comments = _resources.Comment.where(_params);
     return {
-      comments: _comments.cached
+      comments: _comments
     };
   },
   methods: {
@@ -35035,6 +35054,10 @@ var Comment = exports.Comment = function ($, _) {
     } else {
       return _data;
     }
+  };
+
+  srv.where = function (params) {
+    return _.chain(Comment.all().cached).filter(params).value();
   };
 
   return srv;
