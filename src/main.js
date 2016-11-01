@@ -1,5 +1,6 @@
 'use strict';
-import * as resources from './resources.js';
+import { Post } from './posts/post_service.js';
+import { Comment } from './comments/comment_service.js';
 import * as postList from './posts/post_list.vue';
 const Vue = require('vue/dist/vue.js');
 
@@ -36,6 +37,6 @@ const Main = (function (Post, Comment, postList) {
   };
 
   return main;
-})(resources.Post, resources.Comment, postList);
+})(Post, Comment, postList);
 
 Main.init();

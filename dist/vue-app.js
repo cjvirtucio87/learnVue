@@ -40656,6 +40656,56 @@ exports.reload = tryWrap(function (id, options) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var _ = require('lodash');
+var $ = require('jquery');
+
+var Comment = exports.Comment = function ($, _) {
+  var srv = {};
+  var _data = {};
+  var url = './mock/comments.json';
+
+  function _logError(reason) {
+    console.error(reason);
+    throw new Error('ERROR: ' + reason);
+  }
+
+  function _cacheAll(response) {
+    _data.cached = JSON.parse(response);
+    return _data;
+  }
+
+  function _queryAll() {
+    return $.get(url).then(_cacheAll).catch(_logError);
+  }
+
+  srv.all = function (options) {
+    if (options && options.force || _.isEmpty(_data.cached)) {
+      return _queryAll();
+    } else {
+      return Promise.resolve(_data);
+    }
+  };
+
+  srv.where = function (params) {
+    if (_.isEmpty(_data.cached)) return undefined;
+    return _.chain(_data.cached).filter(params).value();
+  };
+
+  srv.update = function (params) {
+    var comment = srv.where({ id: params.id });
+    _.cloneDeep(params, comment);
+    return comment;
+  };
+
+  return srv;
+}($, _);
+
+},{"jquery":2,"lodash":3}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.idDesc = idDesc;
 var _ = require('lodash');
 
@@ -40663,12 +40713,12 @@ function idDesc(iter) {
   return _.chain(iter).orderBy('id', 'desc').value();
 }
 
-},{"lodash":3}],8:[function(require,module,exports){
+},{"lodash":3}],9:[function(require,module,exports){
 'use strict';
 
-var _resources = require('./resources.js');
+var _post_service = require('./posts/post_service.js');
 
-var resources = _interopRequireWildcard(_resources);
+var _comment_service = require('./comments/comment_service.js');
 
 var _post_list = require('./posts/post_list.vue');
 
@@ -40710,11 +40760,11 @@ var Main = function (Post, Comment, postList) {
   };
 
   return main;
-}(resources.Post, resources.Comment, postList);
+}(_post_service.Post, _comment_service.Comment, postList);
 
 Main.init();
 
-},{"./posts/post_list.vue":11,"./resources.js":13,"vue/dist/vue.js":5}],9:[function(require,module,exports){
+},{"./comments/comment_service.js":7,"./posts/post_list.vue":12,"./posts/post_service.js":14,"vue/dist/vue.js":5}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40752,13 +40802,13 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
-},{"lodash":3,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],10:[function(require,module,exports){
+},{"lodash":3,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],11:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40793,13 +40843,13 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
-},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],11:[function(require,module,exports){
+},{"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],12:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40819,7 +40869,7 @@ var _post_edit = require('./post_edit.vue');
 
 var postEdit = _interopRequireWildcard(_post_edit);
 
-var _resources = require('../resources.js');
+var _post_service = require('./post_service.js');
 
 var _filters = require('../filters.js');
 
@@ -40828,17 +40878,17 @@ var filters = _interopRequireWildcard(_filters);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _create(params) {
-  _resources.Post.create(params);
+  _post_service.Post.create(params);
 }
 
 function _update(params) {
   var vm = this;
-  _resources.Post.update(params);
+  _post_service.Post.update(params);
   vm.clearSelect();
 }
 
 function _initNewPost() {
-  return _resources.Post.new().then(function (formData) {
+  return _post_service.Post.new().then(function (formData) {
     return formData;
   });
 }
@@ -40904,7 +40954,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"../filters.js":7,"../resources.js":13,"./post_edit.vue":9,"./post_item.vue":10,"./post_new.vue":12,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],12:[function(require,module,exports){
+},{"../filters.js":8,"./post_edit.vue":10,"./post_item.vue":11,"./post_new.vue":13,"./post_service.js":14,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],13:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -40940,13 +40990,13 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
-},{"lodash":3,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],13:[function(require,module,exports){
+},{"lodash":3,"vue":4,"vueify/node_modules/vue-hot-reload-api":6}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -40955,7 +41005,6 @@ Object.defineProperty(exports, "__esModule", {
 var _ = require('lodash');
 var $ = require('jquery');
 
-// HTTP
 var Post = exports.Post = function ($, _) {
   var srv = {};
   var _data = {
@@ -41032,48 +41081,7 @@ var Post = exports.Post = function ($, _) {
   return srv;
 }($, _);
 
-var Comment = exports.Comment = function ($, _) {
-  var srv = {};
-  var _data = {};
-  var url = './mock/comments.json';
-
-  function _logError(reason) {
-    console.error(reason);
-    throw new Error('ERROR: ' + reason);
-  }
-
-  function _cacheAll(response) {
-    _data.cached = JSON.parse(response);
-    return _data;
-  }
-
-  function _queryAll() {
-    return $.get(url).then(_cacheAll).catch(_logError);
-  }
-
-  srv.all = function (options) {
-    if (options && options.force || _.isEmpty(_data.cached)) {
-      return _queryAll();
-    } else {
-      return Promise.resolve(_data);
-    }
-  };
-
-  srv.where = function (params) {
-    if (_.isEmpty(_data.cached)) return undefined;
-    return _.chain(_data.cached).filter(params).value();
-  };
-
-  srv.update = function (params) {
-    var comment = srv.where({ id: params.id });
-    _.cloneDeep(params, comment);
-    return comment;
-  };
-
-  return srv;
-}($, _);
-
-},{"jquery":2,"lodash":3}]},{},[8])
+},{"jquery":2,"lodash":3}]},{},[9])
 
 
 //# sourceMappingURL=vue-app.js.map

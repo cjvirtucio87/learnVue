@@ -20,7 +20,7 @@
   import * as postNew from './post_new.vue';
   import * as postEdit from './post_edit.vue';
 
-  import { Post } from '../resources.js';
+  import { Post } from './post_service.js';
   import * as filters from '../filters.js';
 
   function _create (params) {
