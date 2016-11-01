@@ -60,6 +60,13 @@ export const Post = (function ($, _) {
     }
   };
 
+  srv.where = function (params) {
+    if (_.isEmpty(_data.cached)) return undefined;
+    return _.chain(_data.cached)
+            .filter(params)
+            .value();
+  };
+
   srv.create = function (params, options) {
     if ((options && options.force)) {
       return _queryCreate(params);
@@ -70,6 +77,12 @@ export const Post = (function ($, _) {
 
   srv.new = function () {
     return srv.all().then(_initNewPost);
+  };
+
+  srv.update = function (params) {
+    const post = srv.where({ id: params.id });
+    _.cloneDeep(params, post);
+    return post;
   };
 
   return srv;
@@ -112,10 +125,9 @@ export const Comment = (function ($, _) {
   };
 
   srv.update = function (params) {
-    const post = srv.where({ id: params.id });
-    _.cloneDeep(params, post);
-    console.log(post);
-    return post;
+    const comment = srv.where({ id: params.id });
+    _.cloneDeep(params, comment);
+    return comment;
   };
 
   return srv;
