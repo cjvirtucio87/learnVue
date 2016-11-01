@@ -50,13 +50,7 @@
     vm.selected = id;
     vm.$forceUpdate();
   }
-
-  function _initData () {
-    const vm = this;
-    vm.selected = undefined;
-    vm.newPost = Post.new();
-  }
-
+  
   export default {
     name: 'post-list',
     props: {

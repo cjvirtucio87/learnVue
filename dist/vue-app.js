@@ -46253,6 +46253,36 @@ exports.reload = tryWrap(function (id, options) {
 })
 
 },{}],8:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  name: 'comment-list',
+  props: {
+    comments: Array
+  }
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function(){with(this){return _h('div',[_l((comments),function(comment){return _h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-6 offset-md-3"},["\n      "+_s(comment.id)+"\n    "])])})])}}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5", __vue__options__)
+  } else {
+    hotAPI.rerender("data-v-5", __vue__options__)
+  }
+})()}
+
+},{"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46308,7 +46338,7 @@ var Comment = exports.Comment = function ($, _) {
   return srv;
 }($, _);
 
-},{"jquery":3,"lodash":4}],9:[function(require,module,exports){
+},{"jquery":3,"lodash":4}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46321,7 +46351,7 @@ function idDesc(iter) {
   return _.chain(iter).orderBy('id', 'desc').value();
 }
 
-},{"lodash":4}],10:[function(require,module,exports){
+},{"lodash":4}],11:[function(require,module,exports){
 'use strict';
 
 var _post_service = require('./posts/post_service.js');
@@ -46373,7 +46403,7 @@ var Main = function (Post, Comment, postList) {
 
 Main.init();
 
-},{"./comments/comment_service.js":8,"./posts/post_list.vue":13,"./posts/post_service.js":15,"vue/dist/vue.js":6}],11:[function(require,module,exports){
+},{"./comments/comment_service.js":9,"./posts/post_list.vue":14,"./posts/post_service.js":16,"vue/dist/vue.js":6}],12:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46417,7 +46447,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],12:[function(require,module,exports){
+},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],13:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46425,10 +46455,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _comment_list = require('../comments/comment_list.vue');
+
+var _comment_list2 = _interopRequireDefault(_comment_list);
+
+var _comment_service = require('../comments/comment_service.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _selectPost() {
   var vm = this;
   vm.onSelect(vm.post.id);
+}
+
+function _getComments() {
+  var vm = this;
+  return _comment_service.Comment.where({ commentable_id: vm.post.id, commentable_type: 'post' });
 }
 
 exports.default = {
@@ -46437,15 +46479,24 @@ exports.default = {
     post: Object,
     onSelect: Function
   },
+  data: function data() {
+    return {
+      comments: undefined
+    };
+  },
+  components: {
+    'comment-list': _comment_list2.default
+  },
   methods: {
-    selectPost: _selectPost
+    selectPost: _selectPost,
+    getComments: _getComments
   }
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block",attrs:{"style":"cursor: pointer;"},on:{"click":selectPost}},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text"},[_s(post.body)])])])}}
+__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block",attrs:{"style":"cursor: pointer;"},on:{"click":selectPost}},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text"},[_s(post.body)])," ",_h('comment-list',{attrs:{"comments":getComments()}})])])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -46458,7 +46509,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],13:[function(require,module,exports){
+},{"../comments/comment_list.vue":8,"../comments/comment_service.js":9,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],14:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46514,12 +46565,6 @@ function _select(id) {
   vm.$forceUpdate();
 }
 
-function _initData() {
-  var vm = this;
-  vm.selected = undefined;
-  vm.newPost = _post_service.Post.new();
-}
-
 exports.default = {
   name: 'post-list',
   props: {
@@ -46562,7 +46607,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"../filters.js":9,"./post_edit.vue":11,"./post_item.vue":12,"./post_new.vue":14,"./post_service.js":15,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],14:[function(require,module,exports){
+},{"../filters.js":10,"./post_edit.vue":12,"./post_item.vue":13,"./post_new.vue":15,"./post_service.js":16,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],15:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46604,7 +46649,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],15:[function(require,module,exports){
+},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46699,7 +46744,7 @@ var Post = exports.Post = function ($, _) {
   return srv;
 }($, _);
 
-},{"bluebird":1,"jquery":3,"lodash":4}]},{},[10])
+},{"bluebird":1,"jquery":3,"lodash":4}]},{},[11])
 
 
 //# sourceMappingURL=vue-app.js.map

@@ -2,6 +2,7 @@
 import { Post } from './posts/post_service.js';
 import { Comment } from './comments/comment_service.js';
 import * as postList from './posts/post_list.vue';
+
 const Vue = require('vue/dist/vue.js');
 
 // Bootstrapping the application
