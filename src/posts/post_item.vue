@@ -46,7 +46,9 @@
         newComment: undefined
       };
     },
-    mounted: function () {
+    created: function () {
+      // Need to use the CREATED callback, not mounted. If using mounted, the empty comment
+      // doesn't get built in time for use in the <comment-new> component.
       const vm = this;
       // Use instance methods here, not private methods.
       vm.getComments();
