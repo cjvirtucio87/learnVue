@@ -31,7 +31,6 @@ export const Comment = (function ($, _) {
     const newComment = {
       id: newId,
       author: undefined,
-      title: undefined,
       body: undefined,
       commentable_id: commentableId,
       commentable_type: commentableType

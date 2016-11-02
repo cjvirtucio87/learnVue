@@ -1,4 +1,3 @@
-<!-- Need to fix comment-new. newComment undefined? -->
 <template>
   <div class='card card-block'>
     <form @submit.prevent='createComment'>

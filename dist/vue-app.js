@@ -46259,40 +46259,33 @@ exports.reload = tryWrap(function (id, options) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _comment_service = require('./comment_service.js');
-
-function _getChildComments(id) {
-  return _comment_service.Comment.where({ commentable_id: id, commentable_type: 'comment' });
-}
-
 exports.default = {
   name: 'comment-list',
   props: {
     comments: Array
   },
-  methods: {
-    getChildComments: _getChildComments
+  components: {
+    'comment-item': commentItem
   }
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',[_l((comments),function(comment){return _h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-8"},[_h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block"},[_h('h5',{staticClass:"text-muted"},["comment by "+_s(comment.author)])," ",_h('p',{staticClass:"card-text"},[_s(comment.body)])," ",(getChildComments(comment.id).length)?_h('comment-list',{attrs:{"comments":getChildComments(comment.id)}}):_e()])])])])})])}}
+__vue__options__.render = function(){with(this){return _h('div',[_l((clonedComments),function(comment){return _h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-8"},[_h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block"},[_h('comment-item',{attrs:{"comment":comment,"on-refresh":refreshChildComments}})])])])])})])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6", __vue__options__)
+    hotAPI.rerender("data-v-5", __vue__options__)
   }
 })()}
 
-},{"./comment_service.js":10,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],9:[function(require,module,exports){
+},{"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],9:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46328,9 +46321,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-6", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-5", __vue__options__)
+    hotAPI.rerender("data-v-6", __vue__options__)
   }
 })()}
 
@@ -46369,7 +46362,6 @@ var Comment = exports.Comment = function ($, _) {
     var newComment = {
       id: newId,
       author: undefined,
-      title: undefined,
       body: undefined,
       commentable_id: commentableId,
       commentable_type: commentableType
@@ -46532,9 +46524,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
@@ -46766,9 +46758,9 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
