@@ -5,7 +5,7 @@
       <p class='card-text' style='cursor: pointer;' @click='selectPost'>{{post.body}}</p>
       <comment-new :new-comment='newComment' :on-create='createComment'></comment-new>
 
-      <comment-list :comments='comments'></comment-list>
+      <comment-list :commentable-id='post.id' :commentable-type="'post'"></comment-list>
     </div>
   </div>
 </template>

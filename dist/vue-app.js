@@ -46259,20 +46259,116 @@ exports.reload = tryWrap(function (id, options) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _comment_new = require('./comment_new.vue');
+
+var _comment_new2 = _interopRequireDefault(_comment_new);
+
+var _comment_service = require('./comment_service.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _createComment(params) {
+  var vm = this;
+  _comment_service.Comment.create(params);
+  vm.onRefresh(vm.comment.id);
+}
+
+function _buildComment() {
+  var vm = this;
+  vm.newComment = _comment_service.Comment.new(vm.comment.id, 'comment');
+}
+
 exports.default = {
-  name: 'comment-list',
   props: {
-    comments: Array
+    comment: Object,
+
+    onRefresh: Function
   },
   components: {
-    'comment-item': commentItem
+    'comment-new': _comment_new2.default
+  },
+  data: function data() {
+    return {
+      newComment: undefined
+    };
+  },
+  created: function created() {
+    var vm = this;
+    vm.buildComment();
+  },
+  methods: {
+    createComment: _createComment,
+    buildComment: _buildComment
   }
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',[_l((clonedComments),function(comment){return _h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-8"},[_h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block"},[_h('comment-item',{attrs:{"comment":comment,"on-refresh":refreshChildComments}})])])])])})])}}
+__vue__options__.render = function(){with(this){return _h('div',[_h('h5',{staticClass:"text-muted"},["comment by "+_s(comment.author)])," ",_h('p',{staticClass:"card-text"},[_s(comment.body)])," ",_h('comment-new',{attrs:{"new-comment":newComment,"on-create":createComment}})])}}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7", __vue__options__)
+  } else {
+    hotAPI.rerender("data-v-7", __vue__options__)
+  }
+})()}
+
+},{"./comment_new.vue":10,"./comment_service.js":11,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],9:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _comment_item = require('./comment_item.vue');
+
+var _comment_item2 = _interopRequireDefault(_comment_item);
+
+var _comment_service = require('./comment_service.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getComments() {
+  var vm = this;
+  var params = { commentable_id: vm.commentableId, commentable_type: vm.commentableType };
+  vm.comments = _comment_service.Comment.where(params);
+  console.log(vm.comments);
+}
+
+exports.default = {
+  name: 'comment-list',
+  props: {
+    commentableId: Number,
+    commentableType: String
+  },
+  data: function data() {
+    return {
+      comments: undefined
+    };
+  },
+  created: function created() {
+    var vm = this;
+    vm.getComments();
+  },
+  components: {
+    'comment-item': _comment_item2.default
+  },
+  methods: {
+    getComments: _getComments
+  }
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function(){with(this){return _h('div',[_l((comments),function(comment){return _h('div',{staticClass:"row"},[_h('div',{staticClass:"col-md-8"},[_h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block"},[_h('comment-item',{attrs:{"comment":comment}})," ",_h('comment-list',{attrs:{"commentable-id":comment.id,"commentable-type":'comment'}})])])])])})])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -46285,7 +46381,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],9:[function(require,module,exports){
+},{"./comment_item.vue":8,"./comment_service.js":11,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46327,7 +46423,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],10:[function(require,module,exports){
+},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46421,7 +46517,7 @@ var Comment = exports.Comment = function ($, _) {
   return srv;
 }($, _);
 
-},{"bluebird":1,"jquery":3,"lodash":4}],11:[function(require,module,exports){
+},{"bluebird":1,"jquery":3,"lodash":4}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46434,7 +46530,7 @@ function idDesc(iter) {
   return _.chain(iter).orderBy('id', 'desc').value();
 }
 
-},{"lodash":4}],12:[function(require,module,exports){
+},{"lodash":4}],13:[function(require,module,exports){
 'use strict';
 
 var _post_service = require('./posts/post_service.js');
@@ -46486,7 +46582,7 @@ var Main = function (Post, Comment, postList) {
 
 Main.init();
 
-},{"./comments/comment_service.js":10,"./posts/post_list.vue":15,"./posts/post_service.js":17,"vue/dist/vue.js":6}],13:[function(require,module,exports){
+},{"./comments/comment_service.js":11,"./posts/post_list.vue":16,"./posts/post_service.js":18,"vue/dist/vue.js":6}],14:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46530,7 +46626,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],14:[function(require,module,exports){
+},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],15:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46609,7 +46705,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block"},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text",attrs:{"style":"cursor: pointer;"},on:{"click":selectPost}},[_s(post.body)])," ",_h('comment-new',{attrs:{"new-comment":newComment,"on-create":createComment}})," ",_h('comment-list',{attrs:{"comments":comments}})])])}}
+__vue__options__.render = function(){with(this){return _h('div',{staticClass:"card"},[_h('div',{staticClass:"card-block"},[_h('h3',{staticClass:"card-title"},[_s(post.title)])," ",_h('p',{staticClass:"card-text",attrs:{"style":"cursor: pointer;"},on:{"click":selectPost}},[_s(post.body)])," ",_h('comment-new',{attrs:{"new-comment":newComment,"on-create":createComment}})," ",_h('comment-list',{attrs:{"commentable-id":post.id,"commentable-type":'post'}})])])}}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -46622,7 +46718,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"../comments/comment_list.vue":8,"../comments/comment_new.vue":9,"../comments/comment_service.js":10,"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],15:[function(require,module,exports){
+},{"../comments/comment_list.vue":9,"../comments/comment_new.vue":10,"../comments/comment_service.js":11,"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],16:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46722,7 +46818,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"../filters.js":11,"./post_edit.vue":13,"./post_item.vue":14,"./post_new.vue":16,"./post_service.js":17,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],16:[function(require,module,exports){
+},{"../filters.js":12,"./post_edit.vue":14,"./post_item.vue":15,"./post_new.vue":17,"./post_service.js":18,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],17:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -46764,7 +46860,7 @@ if (module.hot) {(function () {  var hotAPI = require("vueify/node_modules/vue-h
   }
 })()}
 
-},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],17:[function(require,module,exports){
+},{"lodash":4,"vue":5,"vueify/node_modules/vue-hot-reload-api":7}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46860,7 +46956,7 @@ var Post = exports.Post = function ($, _) {
   return srv;
 }($, _);
 
-},{"bluebird":1,"jquery":3,"lodash":4}]},{},[12])
+},{"bluebird":1,"jquery":3,"lodash":4}]},{},[13])
 
 
 //# sourceMappingURL=vue-app.js.map
