@@ -1,10 +1,17 @@
 'use strict';
 const _ = require('lodash');
 const $ = require('jquery');
+const Promise = require('bluebird');
 
 export const Comment = (function ($, _) {
   const srv = {};
-  const _data = {};
+
+  const _data = {
+    cached: [],
+    created: undefined,
+    newComment: undefined
+  };
+
   const url = './mock/comments.json';
 
   function _logError (reason) {
@@ -38,9 +45,21 @@ export const Comment = (function ($, _) {
     return _data;
   }
 
+  function _cacheAdd (params) {
+    _data.cached.push(params);
+    _data.created = params;
+    return _data.created;
+  }
+
   function _queryAll () {
     return $.get(url)
       .then(_cacheAll)
+      .catch(_logError);
+  }
+
+  function _queryCreate (params) {
+    return $.post(url, params)
+      .then(_cacheAdd)
       .catch(_logError);
   }
 
@@ -59,21 +78,20 @@ export const Comment = (function ($, _) {
             .value();
   };
 
-  srv.update = function (params) {
-    const comment = srv.where({ id: params.id });
-    _.cloneDeep(params, comment);
-    return comment;
-  };
-
   srv.new = function (commentableId, commentableType) {
     _initNewComment(commentableId, commentableType);
     return _data.newComment;
   };
 
-  srv.init = function () {
-    return srv.all().then((data) => {
-      return data;
-    });
+  srv.create = function (params, options) {
+    if (options && options.force) return _queryCreate(params);
+    return Promise.resolve(_cacheAdd(params));
+  };
+
+  srv.update = function (params) {
+    const comment = srv.where({ id: params.id });
+    _.cloneDeep(params, comment);
+    return comment;
   };
 
   return srv;

@@ -1,8 +1,8 @@
 <template>
   <div class='card'>
-    <div class='card-block' @click='selectPost'>
+    <div class='card-block'>
       <h3 class='card-title'>{{post.title}}</h3>
-      <p class='card-text' style='cursor: pointer;'>{{post.body}}</p>
+      <p class='card-text' style='cursor: pointer;' @click='selectPost'>{{post.body}}</p>
       <comment-new :new-comment='newComment' :on-create='createComment'></comment-new>
 
       <comment-list :comments='comments'></comment-list>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+  const _ = require('lodash');
   import commentList from '../comments/comment_list.vue';
   import commentNew from '../comments/comment_new.vue';
   import { Comment } from '../comments/comment_service.js';
@@ -22,7 +23,8 @@
 
   function _getComments () {
     const vm = this;
-    vm.comments = Comment.where({ commentable_id: vm.post.id, commentable_type: 'post' });
+    const comments = Comment.where({ commentable_id: vm.post.id, commentable_type: 'post' });
+    vm.comments = _.cloneDeep(comments);
   }
 
   function _buildComment () {
@@ -31,7 +33,12 @@
   }
 
   function _createComment (params) {
+    const vm = this;
     Comment.create(params);
+    // Have to manually refresh comments array in component because this specific post's comments
+    // are not linked to the cache in the _data object. That cache was meant to hold ALL the comments
+    // in the database.
+    vm.getComments();
   }
 
   export default {
